@@ -21,3 +21,6 @@ desktop.ini
 .vscode/
 .idea/
 node_modules/
+
+# Original full-size photos (the site uses the optimised copies in assets/)
+01 Images/
