@@ -1,0 +1,23 @@
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Vercel
+.vercel
+
+# Local Claude Code settings (machine-specific permissions)
+.claude/settings.local.json
+
+# Reference screenshots (not used by the site)
+screenshots/
+reference/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+node_modules/
