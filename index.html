@@ -59,9 +59,9 @@
     <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="wrap">
-        <h1 id="hero-title" class="reveal d1">We <b>Guarantee</b> You <b>15&#8288;–&#8288;25 Qualified Sales Appointments</b> <span class="circled"><b>Per Month</b><svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M30 12C70 2 170 4 190 26C200 44 150 56 96 56C40 56 4 46 8 28C12 14 50 6 112 5"/></svg></span><br>(Within 60 Days) or You Pay Nothing</h1>
+        <h1 id="hero-title" class="reveal d1">We Book <span class="circled"><b>Qualified Sales Calls</b><svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 12C70 2 170 4 190 26C200 44 150 56 96 56C40 56 4 46 8 28C12 14 50 6 112 5"/></svg></span> on Your Calendar.<br>You Only Pay for the Ones <span class="nowrap">That <b>Show Up.</b></span></h1>
 
-        <p class="lead reveal d1">Zero Ad Spend • Zero Retainer • You Only Pay Per Appointment That Shows Up</p>
+        <p class="lead reveal d1">Zero Ad Spend • Zero Retainer • Pay Per Show</p>
 
         <!-- VSL: to change the video, replace the YouTube ID (d28rGXcdGQM) in the src below -->
         <div class="vsl reveal d2">
@@ -220,7 +220,7 @@
       </div>
     </section>
 
-    <!-- BOOKING: to change the calendar, edit the Calendly URL in the iframe src AND the fallback link -->
+    <!-- BOOKING: to change the calendar, edit the booking URL in the iframe src AND the fallback link -->
     <section id="contact" aria-labelledby="book-title">
       <div class="wrap">
         <div class="section-head reveal">
@@ -230,9 +230,9 @@
         </div>
 
         <div class="cal-embed reveal d1">
-          <iframe src="https://calendly.com/sunnyxxsingh/leak?hide_gdpr_banner=1&amp;hide_event_type_details=1&amp;background_color=0f0f10&amp;text_color=f4f2ec&amp;primary_color=f63c11" title="Book a strategy call with Sunny Singh" loading="lazy"></iframe>
+          <iframe src="https://book.erevoss.com/widget/bookings/erevoss-landingpage" id="erevoss-landingpage_booking" title="Book a strategy call with Sunny Singh" scrolling="no"></iframe>
           <p class="cal-fallback">
-            Trouble loading the calendar? <a href="https://calendly.com/sunnyxxsingh/leak" target="_blank" rel="noopener">Open it in a new tab →</a>
+            Trouble loading the calendar? <a href="https://book.erevoss.com/widget/bookings/erevoss-landingpage" target="_blank" rel="noopener">Open it in a new tab →</a>
           </p>
         </div>
       </div>
@@ -263,6 +263,8 @@
     </div>
   </div>
 
+  <!-- Booking tool's embed script: resizes the calendar box to fit its content, so it doesn't scroll inside -->
+  <script src="https://link.msgsndr.com/js/form_embed.js" defer></script>
   <script src="script.js"></script>
 </body>
 </html>

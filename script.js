@@ -61,6 +61,30 @@
     });
   }
 
+  // Hand-drawn headline circle: measure its on-screen length so the draw-in
+  // animation covers the whole loop, whatever the width of the circled words.
+  var circles = document.querySelectorAll('.circled path');
+  var measureCircles = function () {
+    circles.forEach(function (p) {
+      var m = p.getScreenCTM();
+      if (!m) return;
+      var total = p.getTotalLength(), len = 0, prev = null;
+      for (var i = 0; i <= 80; i++) {
+        var pt = p.getPointAtLength(total * i / 80).matrixTransform(m);
+        if (prev) len += Math.hypot(pt.x - prev.x, pt.y - prev.y);
+        prev = pt;
+      }
+      p.style.setProperty('--len', Math.ceil(len) + 4);
+    });
+  };
+  measureCircles();
+  // web fonts change the width of the words, so measure again once they've loaded
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureCircles);
+  circles.forEach(function (p) {
+    // once drawn, drop the dash so resizing the window can't open a gap
+    p.addEventListener('animationend', function () { p.style.strokeDasharray = 'none'; });
+  });
+
   // Missing photos: remove the <img> so the placeholder / initials underneath show
   document.querySelectorAll('img[data-fallback]').forEach(function (img) {
     var drop = function () { img.remove(); };
