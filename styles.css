@@ -234,7 +234,7 @@ section{padding-block:var(--sp-7);position:relative;}
 .founder-body p{color:var(--text-soft);font-size:0.98rem;}
 .founder-body p + p{margin-top:var(--sp-2);}
 .founder-body .hl{color:var(--accent-soft);}
-.founder-body .nowrap{white-space:nowrap;}
+.nowrap{white-space:nowrap;}
 .signature{font-family:'Mrs Saint Delafield',cursive;font-size:2.8rem;line-height:1;color:#d8d8dc;margin-top:var(--sp-3);padding-left:0.2em;}
 @media (max-width:720px){
   .founder{grid-template-columns:1fr;gap:var(--sp-3);padding:var(--sp-4) var(--sp-3);text-align:center;}
