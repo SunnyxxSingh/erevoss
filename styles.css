@@ -333,6 +333,8 @@ footer .flinks a{color:var(--text-mute);font-size:0.85rem;transition:color .2s;}
 .legal-body{max-width:720px;margin-inline:auto;color:var(--text-soft);font-size:0.98rem;}
 .legal-body h3{color:var(--text);font-size:1.15rem;margin:var(--sp-4) 0 0.6em;}
 .legal-body p{margin-bottom:var(--sp-2);}
+.legal-body a{color:var(--accent-soft);text-decoration:underline;text-underline-offset:3px;}
+.legal-body a:hover{color:var(--text);}
 .legal-body h4{font-family:'Manrope',sans-serif;font-weight:700;color:var(--text);font-size:1rem;margin:var(--sp-3) 0 0.5em;}
 .legal-body ul{padding-left:1.2em;margin-bottom:var(--sp-2);display:grid;gap:0.45em;}
 .legal-body li::marker{color:var(--accent);}
@@ -340,7 +342,7 @@ footer .flinks a{color:var(--text-mute);font-size:0.85rem;transition:color .2s;}
 .legal-body ul.checks li{position:relative;padding-left:1.6em;}
 .legal-body ul.checks li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700;}
 .legal-back{margin-top:var(--sp-5);}
-.legal-back a{color:var(--accent-soft);}
+.legal-back a{color:var(--accent-soft);text-decoration:none;}
 
 /* ============ STICKY BOOK BAR ============ */
 .book-bar{position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(13,13,15,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line-2);transform:translateY(110%);transition:transform .4s cubic-bezier(.2,.8,.2,1);}
