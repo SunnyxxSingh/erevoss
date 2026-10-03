@@ -122,8 +122,10 @@
     else img.addEventListener('error', drop);
   });
 
-  // Scroll reveals
-  var els = document.querySelectorAll('.reveal');
+  // Scroll reveals. Everything in the hero (headline, video, CTA button) fades in
+  // together on load, so the button never waits for a scroll; the rest reveal on scroll.
+  document.querySelectorAll('.hero .reveal').forEach(function (el) { el.classList.add('in'); });
+  var els = document.querySelectorAll('.reveal:not(.in)');
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });

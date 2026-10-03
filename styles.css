@@ -140,7 +140,9 @@ section{padding-block:var(--sp-7);position:relative;}
 
 /* ============ VSL ============ */
 .vsl{
-  position:relative;max-width:779px;margin:0 auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+  /* full size (779px) on tall screens; on shorter screens the video shrinks so the
+     "Book A Strategy Call" button below it stays visible without scrolling */
+  position:relative;max-width:clamp(420px, calc((100svh - 500px) * 16 / 9), 779px);margin:0 auto;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
   background:radial-gradient(120% 120% at 50% 20%,#20232a 0%,#0e0f12 70%);
   border:1px solid var(--line-2);box-shadow:var(--shadow);
 }
