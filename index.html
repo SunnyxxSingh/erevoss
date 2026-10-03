@@ -31,6 +31,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- Wistia VSL player -->
+<script src="https://fast.wistia.com/player.js" async></script>
+<script src="https://fast.wistia.com/embed/h9j6kf60p4.js" async type="module"></script>
 </head>
 <body>
 
@@ -63,9 +66,9 @@
 
         <p class="lead reveal d1">Zero Ad Spend • Zero Retainer • Pay Per Show</p>
 
-        <!-- VSL: to change the video, replace the YouTube ID (d28rGXcdGQM) in the src below -->
+        <!-- VSL: Wistia player. To change the video, replace the media ID (h9j6kf60p4) here AND in the embed script in <head> -->
         <div class="vsl reveal d2">
-          <iframe id="vsl-video" src="https://www.youtube-nocookie.com/embed/d28rGXcdGQM?autoplay=1&amp;mute=1&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;cc_load_policy=0&amp;enablejsapi=1" title="Sunny, founder of Erevoss" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" loading="eager"></iframe>
+          <wistia-player id="vsl-video" media-id="h9j6kf60p4" aspect="1.7777777777777777" autoplay muted></wistia-player>
           <button class="vsl-unmute" id="vsl-unmute" type="button" aria-label="Unmute the video" hidden>
             <span class="vsl-unmute-card">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
@@ -158,6 +161,43 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ROI CALCULATOR: price per appointment lives in script.js (PRICE_PER_SHOW) -->
+    <section id="calculator" aria-labelledby="calc-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">The math</span>
+          <h2 id="calc-title">See What Pay-Per-Show Is Worth to You.</h2>
+          <p>Plug in your own deal size and close rate. You pay $200 per appointment that shows up, nothing else.</p>
+        </div>
+
+        <div class="calc reveal d1">
+          <div class="calc-inputs">
+            <div class="calc-field">
+              <label for="calc-deal">Average deal value</label>
+              <div class="calc-money"><span>$</span><input id="calc-deal" type="text" inputmode="numeric" value="15,000" autocomplete="off"></div>
+            </div>
+            <div class="calc-field">
+              <div class="calc-row"><label for="calc-close">Your close rate</label><output id="calc-close-out" for="calc-close">20%</output></div>
+              <input id="calc-close" type="range" min="5" max="50" step="1" value="20">
+            </div>
+            <div class="calc-field">
+              <div class="calc-row"><label for="calc-appts">Appointments per month</label><output id="calc-appts-out" for="calc-appts">15</output></div>
+              <input id="calc-appts" type="range" min="5" max="50" step="1" value="15">
+            </div>
+          </div>
+
+          <div class="calc-results" aria-live="polite">
+            <div class="calc-stat"><span class="k">You pay</span><span class="v" id="calc-spend">$3,000</span></div>
+            <div class="calc-stat"><span class="k">Deals closed</span><span class="v" id="calc-deals">3</span></div>
+            <div class="calc-stat"><span class="k">Cost per closed deal</span><span class="v" id="calc-cpa">$1,000</span></div>
+            <div class="calc-stat big"><span class="k">New revenue</span><span class="v" id="calc-rev">$45,000</span><span class="roi" id="calc-roi">15× return on spend</span></div>
+            <p class="calc-say" id="calc-say">Book 15 appointments, close 20% of them, and that’s 3 deals worth $45,000 for a $3,000 spend.</p>
+          </div>
+        </div>
+        <p class="calc-note">Example only. Your actual deal size and close rate determine your actual result.</p>
       </div>
     </section>
 

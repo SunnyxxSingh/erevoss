@@ -22,42 +22,28 @@
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Click-to-unmute overlay. Ships hidden and is only revealed once JS runs,
-  // so it can never sit there as a dead control. Clears on click, and also
-  // if the viewer unmutes through the player's own control.
+  // Click-to-unmute overlay for the Wistia VSL. The video autoplays muted
+  // (browsers allow nothing else); the overlay appears once it's playing muted
+  // and clears on click, or if the viewer unmutes through Wistia's own controls.
   var video = document.getElementById('vsl-video');
   var overlay = document.getElementById('vsl-unmute');
   if (video && overlay) {
-    var send = function (func) {
-      video.contentWindow.postMessage(
-        JSON.stringify({ event: 'command', func: func, args: [] }), '*'
-      );
-    };
-    var dismiss = function () {
-      if (overlay.classList.contains('is-off')) return;
-      overlay.classList.add('is-off');
-      setTimeout(function () { overlay.hidden = true; }, 300);
-    };
-    var listen = function () {
-      video.contentWindow.postMessage(
-        JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*'
-      );
-    };
+    var unmuted = false;
+    var dismiss = function () { unmuted = true; overlay.hidden = true; };
+    var showIfMuted = function () { if (!unmuted && video.muted) overlay.hidden = false; else dismiss(); };
 
-    overlay.hidden = false;
+    video.addEventListener('play', showIfMuted);
+    video.addEventListener('mute-change', function (e) {
+      if (e.detail && e.detail.isMuted === false) dismiss();
+    });
     overlay.addEventListener('click', function () {
-      send('unMute');
-      send('playVideo');
+      video.muted = false;                           // same position, no restart
+      if (video.state !== 'playing') video.play();   // resume if it had been paused
       dismiss();
     });
-    video.addEventListener('load', listen);
-    listen();
-
-    window.addEventListener('message', function (e) {
-      if (e.source !== video.contentWindow) return;
-      var data;
-      try { data = JSON.parse(e.data); } catch (err) { return; }
-      if (data && data.info && data.info.muted === false) dismiss();
+    // in case playback started before this script ran
+    if (window.customElements) customElements.whenDefined('wistia-player').then(function () {
+      if (video.state === 'playing') showIfMuted();
     });
   }
 
@@ -84,6 +70,50 @@
     // once drawn, drop the dash so resizing the window can't open a gap
     p.addEventListener('animationend', function () { p.style.strokeDasharray = 'none'; });
   });
+
+  // ROI calculator: what pay-per-show costs vs. what it brings in
+  var PRICE_PER_SHOW = 200;
+  var dealIn = document.getElementById('calc-deal');
+  if (dealIn) {
+    var closeIn = document.getElementById('calc-close');
+    var apptsIn = document.getElementById('calc-appts');
+    var $ = function (id) { return document.getElementById(id); };
+    var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    // whole numbers stay whole; otherwise one decimal, e.g. 2.3
+    var count = function (n) { return Number.isInteger(Math.round(n * 10) / 10) ? String(Math.round(n)) : (Math.round(n * 10) / 10).toFixed(1); };
+    var fill = function (el) { el.style.setProperty('--fill', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); };
+
+    var calc = function () {
+      var deal = parseInt(dealIn.value.replace(/[^\d]/g, ''), 10) || 0;
+      var rate = +closeIn.value / 100;
+      var appts = +apptsIn.value;
+      var spend = appts * PRICE_PER_SHOW;
+      var deals = appts * rate;
+      var rev = deals * deal;
+
+      fill(closeIn); fill(apptsIn);
+      $('calc-close-out').textContent = closeIn.value + '%';
+      $('calc-appts-out').textContent = appts;
+      $('calc-spend').textContent = money(spend);
+      $('calc-deals').textContent = count(deals);
+      $('calc-cpa').textContent = deals > 0 ? money(spend / deals) : '—';
+      $('calc-rev').textContent = money(rev);
+      $('calc-roi').textContent = (rev / spend >= 10 ? Math.round(rev / spend) : (Math.round(rev / spend * 10) / 10)) + '× return on spend';
+      $('calc-say').textContent = 'Book ' + appts + ' appointments, close ' + closeIn.value + '% of them, and that’s ' +
+        (Math.abs(deals - Math.round(deals)) < 1e-9 ? '' : 'roughly ') + count(deals) + ' deal' + (count(deals) === '1' ? '' : 's') +
+        ' worth ' + money(rev) + ' for a ' + money(spend) + ' spend.';
+    };
+
+    // keep thousands separators in the deal value as the visitor types
+    dealIn.addEventListener('input', function () {
+      var digits = dealIn.value.replace(/[^\d]/g, '').slice(0, 9);
+      dealIn.value = digits ? (+digits).toLocaleString('en-US') : '';
+      calc();
+    });
+    closeIn.addEventListener('input', calc);
+    apptsIn.addEventListener('input', calc);
+    calc();
+  }
 
   // Missing photos: remove the <img> so the placeholder / initials underneath show
   document.querySelectorAll('img[data-fallback]').forEach(function (img) {
