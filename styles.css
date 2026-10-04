@@ -324,7 +324,7 @@ footer .flinks{display:flex;gap:var(--sp-3);}
 footer .flinks a{color:var(--text-mute);font-size:0.85rem;transition:color .2s;} footer .flinks a:hover{color:var(--text);}
 
 /* tiny, low-contrast legal link under the footer */
-.legal-link{text-align:center;margin-top:var(--sp-4);}
+.legal-link{display:flex;justify-content:center;flex-wrap:wrap;gap:0.4em 1.5em;margin-top:var(--sp-4);}
 .legal-link a{color:#3d3d43;font-size:0.72rem;transition:color .2s;}
 .legal-link a:hover{color:var(--text-mute);}
 
