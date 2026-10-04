@@ -354,6 +354,10 @@ footer .flinks a{color:var(--text-mute);font-size:0.85rem;transition:color .2s;}
 @keyframes blip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.65);}}
 .book-bar .lead-txt{color:var(--text-soft);font-size:0.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 body.bar-shown{padding-bottom:62px;}
+/* leave room on the right for the GoHighLevel chat bubble (about 58px + margin) so it never covers "Book Now" */
+@media (max-width:1300px){ .book-bar .inner{padding-right:calc(var(--sp-3) + 76px);} }
+/* small phones: let "Booking limited spots this month" wrap instead of disappearing behind the button */
+@media (max-width:480px){ .book-bar .urgency{white-space:normal;line-height:1.25;font-size:0.82rem;} .book-bar .btn{flex-shrink:0;} }
 @media (max-width:600px){ .book-bar .lead-txt{display:none;} }
 
 /* ============ REVEAL (scroll animations) ============ */
