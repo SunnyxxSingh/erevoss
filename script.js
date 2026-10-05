@@ -122,6 +122,29 @@
     else img.addEventListener('error', drop);
   });
 
+  // Testimonials: turn the cards into a right-to-left scrolling strip. The real cards stay in
+  // index.html; a copy of the set is appended so the loop is seamless (copies are hidden from
+  // screen readers). The whole strip fades in as one, instead of card by card.
+  var quotes = document.querySelector('.quotes');
+  if (quotes && quotes.children.length > 1) {
+    var cards = Array.prototype.slice.call(quotes.children);
+    var track = document.createElement('div');
+    track.className = 'quotes-track';
+    cards.forEach(function (card) {
+      card.classList.remove('reveal', 'd1', 'd2', 'd3', 'd4', 'in');
+      track.appendChild(card);
+    });
+    cards.forEach(function (card) {
+      var copy = card.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.setAttribute('data-clone', '');
+      track.appendChild(copy);
+    });
+    quotes.appendChild(track);
+    quotes.classList.add('is-marquee', 'reveal');
+    quotes.style.setProperty('--dur', (cards.length * 9) + 's');   // ~9s per card
+  }
+
   // Scroll reveals. Everything in the hero (headline, video, CTA button) fades in
   // together on load, so the button never waits for a scroll; the rest reveal on scroll.
   document.querySelectorAll('.hero .reveal').forEach(function (el) { el.classList.add('in'); });

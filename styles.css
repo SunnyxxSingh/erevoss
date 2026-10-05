@@ -288,7 +288,23 @@ section{padding-block:var(--sp-7);position:relative;}
 }
 
 /* ============ TESTIMONIALS ============ */
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);}
+.quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-3);max-width:980px;margin-inline:auto;}
+/* Scrolling strip (script.js turns .quotes into this): cards drift right-to-left in a seamless loop.
+   --per = cards visible at once. The track holds the real cards plus a copy, and moves by exactly
+   one set (-50%), so the loop never visibly restarts. Hover pauses it. */
+.quotes.is-marquee{display:block;max-width:none;overflow:hidden;padding-block:10px;container-type:inline-size;--per:3;--gap:var(--sp-3);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);}
+.quotes-track{display:flex;width:max-content;animation:quotesScroll var(--dur,36s) linear infinite;}
+.quotes.is-marquee:hover .quotes-track{animation-play-state:paused;}
+.quotes.is-marquee .quote{flex:0 0 auto;width:calc((100cqw - (var(--per) - 1) * var(--gap)) / var(--per));margin-right:var(--gap);}
+@keyframes quotesScroll{to{transform:translateX(-50%);}}
+@media (max-width:1040px){ .quotes.is-marquee{--per:2;} }
+@media (max-width:640px){ .quotes.is-marquee{--per:1.15;} }
+@media (prefers-reduced-motion:reduce){
+  .quotes.is-marquee{overflow-x:auto;-webkit-mask:none;mask:none;}
+  .quotes-track{animation:none;}
+  .quotes-track [data-clone]{display:none;}
+}
 .quote{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-4);display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s;}
 .quote:hover{transform:translateY(-5px);border-color:var(--line-2);}
 .quote .stars{color:var(--accent-soft);letter-spacing:3px;font-size:0.9rem;margin-bottom:var(--sp-2);}
