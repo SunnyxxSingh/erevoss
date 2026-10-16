@@ -206,7 +206,12 @@
 
             <div class="assume">
               <b>Conservative assumption</b>
-              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo</span>
+              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button></span>
+              <!-- hidden price control (for live demos): opens from the tiny square above, resets to $250 on reload -->
+              <div class="price-panel" id="roi-price-panel" hidden>
+                <label for="roi-price">Cost per show</label>
+                <select id="roi-price"><option value="150">$150</option><option value="200">$200</option><option value="250" selected>$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
+              </div>
             </div>
           </section>
 

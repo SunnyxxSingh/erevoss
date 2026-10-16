@@ -76,8 +76,20 @@
   (function () {
     if (!document.getElementById("roi-calculator")) return;
     const BOOK_URL = "#contact";          // on-page booking calendar
-    const PRICE_PER_MEETING = 250;
+    let PRICE_PER_MEETING = 250;           // default; the hidden "Cost per show" dropdown can change it for the session
     document.querySelectorAll("#roi-calculator .book").forEach((a) => (a.href = BOOK_URL));
+
+    // Hidden price control: tiny square after "22 sending days/mo" shows/hides a price dropdown
+    const priceToggle = document.getElementById("roi-price-toggle");
+    const pricePanel = document.getElementById("roi-price-panel");
+    const priceSel = document.getElementById("roi-price");
+    if (priceToggle && pricePanel && priceSel) {
+      priceToggle.addEventListener("click", () => {
+        pricePanel.hidden = !pricePanel.hidden;
+        priceToggle.setAttribute("aria-expanded", String(!pricePanel.hidden));
+      });
+      priceSel.addEventListener("change", () => { PRICE_PER_MEETING = +priceSel.value; calc(); });
+    }
 
     const STOPS = [1000, 2000, 3000, 5000, 10000];
     const REPLY = 0.01, POSITIVE = 0.05, BOOK = 0.40, DAYS = 22;
