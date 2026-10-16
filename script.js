@@ -74,9 +74,12 @@
   // ROI calculator (ported from erevoss-roi-v3.html; maths unchanged). Element IDs carry a "roi-"
   // prefix so they can't clash with the rest of the page.
   (function () {
-    if (!document.getElementById("roi-calculator")) return;
-    const BOOK_URL = "#contact";          // on-page booking calendar
-    let PRICE_PER_MEETING = 250;           // default; the hidden "Cost per show" dropdown can change it for the session
+    const roiSection = document.getElementById("roi-calculator");
+    if (!roiSection) return;
+    const BOOK_URL = roiSection.dataset.bookUrl || "#contact";   // set per page via data-book-url
+    // default price per show: 250, unless the page sets data-default-price (roi.html uses 150).
+    // The hidden "Cost per show" dropdown can change it for the session.
+    let PRICE_PER_MEETING = +roiSection.dataset.defaultPrice || 250;
     document.querySelectorAll("#roi-calculator .book").forEach((a) => (a.href = BOOK_URL));
 
     // Hidden price control: tiny square after "22 sending days/mo" shows/hides a price dropdown
@@ -88,6 +91,7 @@
         pricePanel.hidden = !pricePanel.hidden;
         priceToggle.setAttribute("aria-expanded", String(!pricePanel.hidden));
       });
+      priceSel.value = String(PRICE_PER_MEETING);
       priceSel.addEventListener("change", () => { PRICE_PER_MEETING = +priceSel.value; calc(); });
     }
 

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI Calculator | Erevoss</title>
+<meta name="description" content="See what pay-per-show cold email appointment setting could be worth to your business.">
+<!-- unlisted demo page: keep it out of search results -->
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://erevoss.com/roi.html">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<script>document.documentElement.className = 'js';</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="roi-page">
+
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- NAV (logo + booking button only) -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="/" class="brand" aria-label="Erevoss home">EREVOSS<span class="mark">.</span></a>
+      <div class="nav-cta">
+        <a href="/#contact" class="btn btn-accent btn-sm">Book A Strategy Call
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- This calculator is a copy of the one on the homepage (index.html). If you change one, change both. -->
+    <section id="roi-calculator" aria-labelledby="roi-title" data-book-url="/#contact" data-default-price="150">
+      <div class="wrap roi-calc">
+        <div class="title reveal">
+          <h1 id="roi-title">Calculate your ROI</h1>
+          <p>Plug in your numbers. See what 1,000 cold emails per day can do for your business.</p>
+        </div>
+
+        <div class="calc reveal d1">
+          <section class="left" aria-labelledby="roi-in-h">
+            <h3 id="roi-in-h">Your numbers</h3>
+
+            <div class="field">
+              <div class="fhead">
+                <label for="roi-vol">Emails per day <i class="tip" tabindex="0">i<span>How many cold emails go out each sending day.</span></i></label>
+                <span class="now" id="roi-vol-v">1,000/day</span>
+              </div>
+              <input id="roi-vol" type="range" min="0" max="4" step="1" value="0" aria-label="Emails per day" aria-valuetext="1,000 per day">
+              <div class="scale" id="roi-sc-vol" role="group" aria-label="Emails per day presets"></div>
+            </div>
+
+            <div class="field">
+              <div class="fhead">
+                <label for="roi-ltv-n">Average client LTV <i class="tip" tabindex="0">i<span>What one new client is worth to you over the whole relationship.</span></i></label>
+                <span class="inbox">$ <input id="roi-ltv-n" class="wide" type="text" value="10,000" inputmode="numeric" autocomplete="off"></span>
+              </div>
+              <input id="roi-ltv" type="range" min="500" max="50000" step="500" value="10000" aria-label="Average client LTV">
+              <div class="scale" id="roi-sc-ltv" aria-hidden="true"></div>
+            </div>
+
+            <div class="field">
+              <div class="fhead">
+                <label for="roi-close-n">Close rate from meetings <i class="tip" tabindex="0">i<span>Share of booked meetings that become paying clients.</span></i></label>
+                <span class="inbox"><input id="roi-close-n" type="number" min="5" max="100" step="1" value="20" inputmode="numeric"> %</span>
+              </div>
+              <input id="roi-close" type="range" min="5" max="100" step="1" value="20" aria-label="Close rate from meetings">
+              <div class="scale" id="roi-sc-close" aria-hidden="true"></div>
+            </div>
+
+            <div class="assume">
+              <b>Conservative assumption</b>
+              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button></span>
+              <!-- hidden price control (for live demos): opens from the tiny square above. Default on this page is $150 (data-default-price above) -->
+              <div class="price-panel" id="roi-price-panel" hidden>
+                <label for="roi-price">Cost per show</label>
+                <select id="roi-price"><option value="150" selected>$150</option><option value="200">$200</option><option value="250">$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
+              </div>
+            </div>
+          </section>
+
+          <section class="right" aria-labelledby="roi-out-h" aria-live="polite">
+            <h3 id="roi-out-h">Projected monthly results</h3>
+            <div class="cards">
+              <div class="card"><span class="k">Total Replies</span><span class="v" id="roi-r-replies"></span></div>
+              <div class="card"><span class="k">Positive replies (leads)</span><span class="v g" id="roi-r-leads"></span></div>
+              <div class="card"><span class="k">Meetings booked</span><span class="v" id="roi-r-meet"></span></div>
+              <div class="card"><span class="k">Deals closed</span><span class="v" id="roi-r-deals"></span></div>
+            </div>
+            <hr>
+            <div class="rev"><span class="k">Projected revenue</span><span class="v" id="roi-r-rev"></span></div>
+            <div class="line"><span class="k">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
+            <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
+            <a class="main-btn book" href="/#contact">Book a Call</a>
+          </section>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <a href="/" class="brand">EREVOSS<span class="mark">.</span></a>
+      <span class="fnote">© 2026 SXS Media Limited, trading as Erevoss. Lead generation agency for B2B Businesses.</span>
+      <div class="flinks"><a href="/#process">Process</a><a href="/#contact">Book a call</a></div>
+    </div>
+    <div class="legal-link"><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="roi.html">ROI Calculator</a></div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

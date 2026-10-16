@@ -245,7 +245,7 @@ section{padding-block:var(--sp-7);position:relative;}
   color:var(--r-text); font-family:var(--r-font); font-size:15px; line-height:normal;
 }
 .roi-calc .title{text-align:center;display:grid;gap:18px;padding-block:0 48px;}
-.roi-calc .title h2{margin:0;color:var(--r-head);font-family:var(--r-display);font-weight:700;font-size:clamp(34px,6vw,52px);letter-spacing:-0.03em;line-height:1.1;}
+.roi-calc .title h1,.roi-calc .title h2{margin:0;color:var(--r-head);font-family:var(--r-display);font-weight:700;font-size:clamp(34px,6vw,52px);letter-spacing:-0.03em;line-height:1.1;}
 .roi-calc .title p{margin:0;color:var(--r-muted);font-size:14px;}
 
 .roi-calc .calc{max-width:1008px;margin:0 auto;border:1px solid var(--r-line);border-radius:10px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden;}
@@ -325,6 +325,9 @@ section{padding-block:var(--sp-7);position:relative;}
 .roi-calc .main-btn{display:block;font-family:var(--r-display);text-align:center;background:linear-gradient(180deg,var(--r-accent-soft),var(--r-accent));color:#fff;font-weight:700;font-size:15px;text-decoration:none;padding:16px;border-radius:999px;margin-top:8px;box-shadow:0 10px 30px -8px rgba(246,60,17,0.55),inset 0 1px 0 rgba(255,255,255,.25);transition:box-shadow .25s,transform .25s;}
 .roi-calc .main-btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px rgba(246,60,17,0.65),inset 0 1px 0 rgba(255,255,255,.3);}
 .roi-calc .main-btn:focus-visible{outline:3px solid rgba(246,60,17,0.4);outline-offset:2px;}
+
+/* standalone ROI page (roi.html) */
+.roi-page #roi-calculator{padding-top:var(--sp-5);}
 
 /* ============ FOUNDER ============ */
 /* card: photo left, bio right (stacks on phones) */
