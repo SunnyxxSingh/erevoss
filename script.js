@@ -71,49 +71,84 @@
     p.addEventListener('animationend', function () { p.style.strokeDasharray = 'none'; });
   });
 
-  // ROI calculator: what pay-per-show costs vs. what it brings in
-  var PRICE_PER_SHOW = 200;
-  var dealIn = document.getElementById('calc-deal');
-  if (dealIn) {
-    var closeIn = document.getElementById('calc-close');
-    var apptsIn = document.getElementById('calc-appts');
-    var $ = function (id) { return document.getElementById(id); };
-    var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
-    // whole numbers stay whole; otherwise one decimal, e.g. 2.3
-    var count = function (n) { return Number.isInteger(Math.round(n * 10) / 10) ? String(Math.round(n)) : (Math.round(n * 10) / 10).toFixed(1); };
-    var fill = function (el) { el.style.setProperty('--fill', ((el.value - el.min) / (el.max - el.min) * 100) + '%'); };
+  // ROI calculator (ported from erevoss-roi-v3.html; maths unchanged). Element IDs carry a "roi-"
+  // prefix so they can't clash with the rest of the page.
+  (function () {
+    if (!document.getElementById("roi-calculator")) return;
+    const BOOK_URL = "#contact";          // on-page booking calendar
+    const PRICE_PER_MEETING = 250;
+    document.querySelectorAll("#roi-calculator .book").forEach((a) => (a.href = BOOK_URL));
 
-    var calc = function () {
-      var deal = parseInt(dealIn.value.replace(/[^\d]/g, ''), 10) || 0;
-      var rate = +closeIn.value / 100;
-      var appts = +apptsIn.value;
-      var spend = appts * PRICE_PER_SHOW;
-      var deals = appts * rate;
-      var rev = deals * deal;
+    const STOPS = [1000, 2000, 3000, 5000, 10000];
+    const REPLY = 0.01, POSITIVE = 0.05, BOOK = 0.40, DAYS = 22;
 
-      fill(closeIn); fill(apptsIn);
-      $('calc-close-out').textContent = closeIn.value + '%';
-      $('calc-appts-out').textContent = appts;
-      $('calc-spend').textContent = money(spend);
-      $('calc-deals').textContent = count(deals);
-      $('calc-cpa').textContent = deals > 0 ? money(spend / deals) : '—';
-      $('calc-rev').textContent = money(rev);
-      $('calc-roi').textContent = (rev / spend >= 10 ? Math.round(rev / spend) : (Math.round(rev / spend * 10) / 10)) + '× return on spend';
-      $('calc-say').textContent = 'Book ' + appts + ' appointments, close ' + closeIn.value + '% of them, and that’s ' +
-        (Math.abs(deals - Math.round(deals)) < 1e-9 ? '' : 'roughly ') + count(deals) + ' deal' + (count(deals) === '1' ? '' : 's') +
-        ' worth ' + money(rev) + ' for a ' + money(spend) + ' spend.';
-    };
+    const $ = (id) => document.getElementById("roi-" + id);
+    const fmt = (n) => Math.round(n).toLocaleString("en-US");
+    const paint = (r) => r.style.setProperty("--p", ((r.value - r.min) / (r.max - r.min)) * 100 + "%");
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const num = (s) => parseFloat(String(s).replace(/,/g, ""));
 
-    // keep thousands separators in the deal value as the visitor types
-    dealIn.addEventListener('input', function () {
-      var digits = dealIn.value.replace(/[^\d]/g, '').slice(0, 9);
-      dealIn.value = digits ? (+digits).toLocaleString('en-US') : '';
-      calc();
+    // Emails per day: slider snaps to the five stops
+    const vol = $("vol");
+    vol.addEventListener("input", calc);
+
+    // Build rulers
+    const tick = (x, inner) => { const t = document.createElement("div"); t.className = "t"; t.style.setProperty("--x", x); t.appendChild(inner); return t; };
+    const label = (txt) => { const s = document.createElement("span"); s.textContent = txt; return s; };
+    ["1k", "2k", "3k", "5k", "10k"].forEach((txt, i) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = txt;
+      b.addEventListener("click", () => { vol.value = i; calc(); });
+      $("sc-vol").appendChild(tick(i / 4, b));
     });
-    closeIn.addEventListener('input', calc);
-    apptsIn.addEventListener('input', calc);
+    const stopTicks = $("sc-vol").querySelectorAll(".t");
+    [500, 50000].forEach((v) =>
+      $("sc-ltv").appendChild(tick((v - 500) / 49500, label(String(v)))));
+    [5, 100].forEach((v) =>
+      $("sc-close").appendChild(tick((v - 5) / 95, label(String(v)))));
+
+    // LTV and close rate: slider and box stay in sync
+    [["ltv", 500, 50000], ["close", 5, 100]].forEach(([id, min, max]) => {
+      const r = $(id), n = $(id + "-n");
+      r.addEventListener("input", () => { n.value = r.value; calc(); });
+      const show = (v) => (id === "ltv" ? (+v).toLocaleString("en-US") : String(v));
+      r.addEventListener("input", () => { n.value = show(r.value); calc(); });
+      n.addEventListener("input", () => { const v = num(n.value); if (isFinite(v)) r.value = clamp(v, min, max); calc(); });
+      n.addEventListener("blur", () => { const v = num(n.value); const c = isFinite(v) ? clamp(v, min, max) : +r.value; r.value = c; n.value = show(c); calc(); });
+    });
+
+    function calc() {
+      const i = +vol.value;
+      const perDay = STOPS[i];
+      stopTicks.forEach((t, k) => { t.classList.toggle("on", k === i); t.firstChild.setAttribute("aria-pressed", k === i); });
+      $("vol-v").textContent = fmt(perDay) + "/day";
+      vol.setAttribute("aria-valuetext", fmt(perDay) + " per day");
+
+      const nLtv = num($("ltv-n").value), nClose = num($("close-n").value);
+      const ltv = isFinite(nLtv) ? clamp(nLtv, 0, 1e9) : +$("ltv").value;
+      const close = (isFinite(nClose) ? clamp(nClose, 0, 100) : +$("close").value) / 100;
+      [vol, $("ltv"), $("close")].forEach(paint);
+
+      const replies = perDay * DAYS * REPLY;
+      const leads = replies * POSITIVE;
+      const meetings = leads * BOOK;
+      const deals = meetings * close;
+      const revenue = deals * ltv;
+      const cost = Math.round(meetings) * PRICE_PER_MEETING;
+      const roi = cost > 0 ? (revenue - cost) / cost * 100 : 0;
+
+      $("r-replies").textContent = fmt(replies);
+      $("r-leads").textContent = fmt(leads);
+      $("r-meet").textContent = fmt(meetings);
+      $("r-deals").textContent = fmt(deals);
+      $("r-rev").textContent = "$" + fmt(revenue);
+      $("r-cost").textContent = "$" + fmt(cost) + "/mo";
+      $("r-roi").textContent = fmt(roi) + "%";
+      $("r-roi").classList.toggle("neg", roi < 0);
+    }
+
     calc();
-  }
+  })();
 
   // Missing photos: remove the <img> so the placeholder / initials underneath show
   document.querySelectorAll('img[data-fallback]').forEach(function (img) {
