@@ -176,6 +176,31 @@
     calc();
   })();
 
+  // Chat widget (GoHighLevel): keep it quiet. By default it pops up a "Hi there! Have a question?" message on its own.
+  // This hides that popup, so only the small chat button shows and the chat opens only when someone clicks it.
+  // (If the widget's own settings ever offer a "greeting / prompt message" switch, turning that off there does the same job.)
+  (function () {
+    var quiet = function () {
+      var w = document.querySelector('chat-widget');
+      if (!w || !w.shadowRoot) return false;
+      if (!w.shadowRoot.getElementById('erevoss-chat-quiet')) {
+        var s = document.createElement('style');
+        s.id = 'erevoss-chat-quiet';
+        s.textContent = '.lc_text-widget--prompt{display:none !important;}';
+        w.shadowRoot.appendChild(s);
+      }
+      return true;
+    };
+    if (quiet()) return;
+    // the widget loads a moment after the page: catch it as soon as it appears, and keep checking for a short while as a fallback
+    if ('MutationObserver' in window) {
+      var mo = new MutationObserver(function () { if (quiet()) mo.disconnect(); });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+      setTimeout(function () { mo.disconnect(); }, 30000);
+    }
+    var tries = 0, t = setInterval(function () { if (quiet() || ++tries > 60) clearInterval(t); }, 500);
+  })();
+
   // Missing photos: remove the <img> so the placeholder / initials underneath show
   document.querySelectorAll('img[data-fallback]').forEach(function (img) {
     var drop = function () { img.remove(); };
