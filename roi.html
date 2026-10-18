@@ -84,7 +84,7 @@
               <!-- hidden tech fee control: kept in step with the tech fee control on the cost card below. It does not change the calculator's own numbers. -->
               <div class="price-panel" id="roi-fee-panel" hidden>
                 <label for="roi-fee">Tech fee per 1,000 emails</label>
-                <select id="roi-fee" autocomplete="off"><option value="600" selected>$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000">$1,000</option></select>
+                <select id="roi-fee" autocomplete="off"><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000" selected>$1,000</option></select>
               </div>
             </div>
           </section>
@@ -134,7 +134,7 @@
             <!-- hidden tech fee control (for live demos): opens from the second tiny square. Resets on reload. -->
             <div class="cs-secret-panel" id="cs-secret-panel" hidden>
               <label for="cs-fee-select">Tech fee per 1,000 emails</label>
-              <select id="cs-fee-select" autocomplete="off"><option value="600" selected>$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000">$1,000</option></select>
+              <select id="cs-fee-select" autocomplete="off"><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000" selected>$1,000</option></select>
             </div>
           </div>
         </section>
@@ -145,7 +145,7 @@
           <h2 class="cmp-label us" id="cs2-title">Done For You by Erevoss <span>(Everything handled)</span></h2>
           <div class="cmp-card us">
             <ul class="cmp-list cs-list">
-              <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Tech fee</span></div><span class="cs-amt"><span id="cs-tech-fee">$600</span><small>/mo</small></span></li>
+              <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Tech fee</span></div><span class="cs-amt"><span id="cs-tech-fee">$1,000</span><small>/mo</small></span></li>
               <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Management retainer</span></div><span class="cs-amt">$0<small>/mo</small></span></li>
               <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Show appointment</span></div><span class="cs-amt"><span id="cs-show-price">$150</span><small>/show</small></span></li>
             </ul>
@@ -270,7 +270,7 @@
               ] }
           ];
 
-          var TECH_FEE = 600;   // the "Done For You by Erevoss" tech fee per 1,000 emails a day (default; the hidden control can change it). It scales with volume like everything else.
+          var TECH_FEE = 1000;   // the "Done For You by Erevoss" tech fee per 1,000 emails a day (default; the hidden control can change it). It scales with volume like everything else.
           var perDayNow = 1000;
           var TICK = '<svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
           var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
