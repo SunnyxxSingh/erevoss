@@ -329,6 +329,33 @@ section{padding-block:var(--sp-7);position:relative;}
 /* standalone ROI page (roi.html) */
 .roi-page #roi-calculator{padding-top:var(--sp-5);}
 
+/* ============ COST COLUMN (roi.html): what it costs to send 1,000 emails a day ============ */
+.cost-stack{position:relative;width:100%;max-width:520px;margin:var(--sp-5) auto 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:34px 30px 28px;box-shadow:0 30px 70px -34px rgba(0,0,0,0.9);}
+.cost-stack .cs-eyebrow{display:inline-flex;align-items:center;gap:.55em;font-family:'Manrope',sans-serif;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-soft);font-weight:700;margin-bottom:10px;}
+.cost-stack .cs-eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.7;}
+.cost-stack h2{font-size:clamp(1.7rem,1.3rem + 2vw,2.2rem);line-height:1.1;margin:0;}
+.cost-stack .cs-sub{color:var(--text-soft);font-size:.98rem;margin-top:10px;}
+.cost-stack .cs-list{list-style:none;padding:0;margin:26px 0 0;}
+.cost-stack .cs-row{padding:16px 0;border-top:1px solid var(--line);}
+.cost-stack .cs-line{display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
+.cost-stack .cs-name{font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;}
+.cost-stack .cs-amt{font-family:'Manrope',sans-serif;font-weight:800;font-size:1.25rem;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.cost-stack .cs-amt small{font-weight:600;font-size:.78rem;color:var(--text-mute);margin-left:2px;}
+.cost-stack .cs-detail{color:var(--text-mute);font-size:.88rem;margin-top:2px;}
+.cost-stack .cs-detail b{color:var(--text-soft);font-weight:600;}
+/* thin bar: this line's share of the total */
+.cost-stack .cs-bar{height:3px;border-radius:2px;background:rgba(255,255,255,0.06);margin-top:10px;overflow:hidden;}
+.cost-stack .cs-bar i{display:block;height:100%;width:var(--share,0%);border-radius:2px;background:linear-gradient(90deg,var(--accent-soft),var(--accent));}
+.cost-stack .cs-total{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:6px;padding:20px 22px;border-radius:14px;
+  background:radial-gradient(130% 160% at 90% -20%,rgba(246,60,17,0.30),transparent 55%),var(--surface-2);border:1px solid rgba(246,60,17,0.38);}
+.cost-stack .cs-total span{font-family:'Manrope',sans-serif;font-weight:700;font-size:1rem;color:var(--text-soft);}
+.cost-stack .cs-total strong{font-family:'Manrope',sans-serif;font-weight:800;font-size:clamp(2rem,1.5rem + 2vw,2.6rem);letter-spacing:-0.02em;line-height:1;font-variant-numeric:tabular-nums;}
+.cost-stack .cs-total strong small{font-size:.9rem;font-weight:600;color:var(--text-mute);margin-left:4px;letter-spacing:0;}
+.cost-stack .cs-scope{color:var(--text-soft);font-size:.9rem;margin-top:16px;}
+.cost-stack .cs-note{color:var(--text-mute);font-size:.82rem;margin-top:12px;padding-top:14px;border-top:1px solid var(--line);}
+@media (max-width:420px){ .cost-stack{padding:26px 20px 22px;} .cost-stack .cs-amt{font-size:1.1rem;} }
+
 /* ============ FOUNDER ============ */
 /* card: photo left, bio right (stacks on phones) */
 .founder{display:grid;grid-template-columns:220px 1fr;gap:var(--sp-5);align-items:start;max-width:900px;margin-inline:auto;

@@ -99,6 +99,41 @@
             <a class="main-btn book" href="/#contact">Book a Call</a>
           </section>
         </div>
+
+        <!-- COST COLUMN: what it costs to send 1,000 emails a day yourself. Edit prices/quantities in the ITEMS list in the script below. -->
+        <section class="cost-stack reveal d2" id="cost-stack" aria-labelledby="cs-title">
+          <span class="cs-eyebrow">The tech alone</span>
+          <h2 id="cs-title">Sending 1,000 emails a day</h2>
+          <p class="cs-sub">What it typically costs you every month, before anyone does any work.</p>
+
+          <ul class="cs-list" id="cs-list"></ul>
+
+          <div class="cs-total"><span>Typical monthly total</span><strong id="cs-total"></strong></div>
+
+          <p class="cs-scope">Tech only. Copywriting, inbox management, monitoring and booking aren't in this number.</p>
+          <p class="cs-note">Typically, to send 1,000 emails a day you'll need about 45 domains, 135 mailboxes, a Hypergrowth-level sending plan, two lead databases, and every lead verified 3 times. Prices are typical list prices and approximate.</p>
+        </section>
+        <script>
+        /* EDIT HERE: one entry per row. monthly = cost per month (can be a calculation). The rows, bars and total recalculate. */
+        (function () {
+          var ITEMS = [
+            { name: 'Domains',            detail: '<b>45</b> domains × $22.99 a year (GoDaddy .com)',     monthly: 45 * 22.99 / 12 },
+            { name: 'Mailboxes',          detail: '<b>135</b> mailboxes (3 per domain) × $2.50',          monthly: 135 * 2.50 },
+            { name: 'Sending platform',   detail: 'Instantly <b>Hypergrowth</b> plan',                    monthly: 97 },
+            { name: 'Lead database #1',   detail: 'Apollo',                                               monthly: 80 },
+            { name: 'Lead database #2',   detail: 'Prospeo (Growth plan)',                                monthly: 99 },
+            { name: 'Email verification', detail: '<b>10,000</b> leads × <b>3</b> checks × $0.01',        monthly: 10000 * 3 * 0.01 }
+          ];
+          var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+          var total = ITEMS.reduce(function (s, i) { return s + i.monthly; }, 0);
+          document.getElementById('cs-list').innerHTML = ITEMS.map(function (i) {
+            return '<li class="cs-row"><div class="cs-line"><span class="cs-name">' + i.name + '</span><span class="cs-amt">' + money(i.monthly) + '<small>/mo</small></span></div>' +
+                   '<div class="cs-detail">' + i.detail + '</div>' +
+                   '<div class="cs-bar" aria-hidden="true"><i style="--share:' + (i.monthly / total * 100).toFixed(1) + '%"></i></div></li>';
+          }).join('');
+          document.getElementById('cs-total').innerHTML = money(total) + '<small>/mo</small>';
+        })();
+        </script>
       </div>
     </section>
 

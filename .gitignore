@@ -24,3 +24,6 @@ node_modules/
 
 # Original full-size photos (the site uses the optimised copies in assets/)
 01 Images/
+
+# Prototypes and working files (not part of the website)
+02 Other/
