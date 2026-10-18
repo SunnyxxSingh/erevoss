@@ -75,11 +75,16 @@
 
             <div class="assume">
               <b>Conservative assumption</b>
-              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button></span>
+              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button><button type="button" class="price-toggle" id="roi-fee-toggle" aria-expanded="false" aria-controls="roi-fee-panel" aria-label="Adjust tech fee"></button></span>
               <!-- hidden price control (for live demos): opens from the tiny square above. Default on this page is $150 (data-default-price above) -->
               <div class="price-panel" id="roi-price-panel" hidden>
                 <label for="roi-price">Cost per show</label>
                 <select id="roi-price"><option value="150" selected>$150</option><option value="200">$200</option><option value="250">$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
+              </div>
+              <!-- hidden tech fee control: kept in step with the tech fee control on the cost card below. It does not change the calculator's own numbers. -->
+              <div class="price-panel" id="roi-fee-panel" hidden>
+                <label for="roi-fee">Tech fee per 1,000 emails</label>
+                <select id="roi-fee" autocomplete="off"><option value="600" selected>$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000">$1,000</option></select>
               </div>
             </div>
           </section>
@@ -120,16 +125,16 @@
             </div>
 
             <div class="cs-total"><span>Estimated monthly operating cost</span><div class="cs-total-amt"><strong id="cs-total"></strong></div></div>
-            <p class="cs-disclaimer">Illustrative costs based on operating a cold email system sending up to <select class="cs-vol-select" id="cs-vol-select" aria-label="Emails per day" autocomplete="off"><option value="1000" selected>1,000</option><option value="2000">2,000</option><option value="3000">3,000</option><option value="4000">4,000</option><option value="5000">5,000</option><option value="10000">10,000</option></select> emails per day. Actual costs vary by provider, campaign complexity and staffing.<button type="button" class="cs-secret-toggle" id="cs-secret-toggle" aria-expanded="false" aria-controls="cs-secret-panel" aria-label="Adjust tech fee"></button><button type="button" class="cs-secret-toggle" id="cs-secret-toggle-2" aria-expanded="false" aria-controls="cs-secret-panel-2" aria-label="Adjust show appointment price"></button></p>
-            <!-- hidden tech fee control (for live demos): opens from the tiny square at the end of the small print above. Resets on reload. -->
+            <p class="cs-disclaimer">Illustrative costs based on operating a cold email system sending up to <select class="cs-vol-select" id="cs-vol-select" aria-label="Emails per day" autocomplete="off"><option value="1000" selected>1,000</option><option value="2000">2,000</option><option value="3000">3,000</option><option value="4000">4,000</option><option value="5000">5,000</option><option value="10000">10,000</option></select> emails per day. Actual costs vary by provider, campaign complexity and staffing.<button type="button" class="cs-secret-toggle" id="cs-secret-toggle-2" aria-expanded="false" aria-controls="cs-secret-panel-2" aria-label="Adjust cost per show"></button><button type="button" class="cs-secret-toggle" id="cs-secret-toggle" aria-expanded="false" aria-controls="cs-secret-panel" aria-label="Adjust tech fee"></button></p>
+            <!-- hidden cost-per-show control: opens from the first tiny square. Default $150; resets on reload. Not linked to the calculator. -->
+            <div class="cs-secret-panel" id="cs-secret-panel-2" hidden>
+              <label for="cs-show-select">Cost per show</label>
+              <select id="cs-show-select" autocomplete="off"><option value="150" selected>$150</option><option value="200">$200</option><option value="250">$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
+            </div>
+            <!-- hidden tech fee control (for live demos): opens from the second tiny square. Resets on reload. -->
             <div class="cs-secret-panel" id="cs-secret-panel" hidden>
               <label for="cs-fee-select">Tech fee per 1,000 emails</label>
               <select id="cs-fee-select" autocomplete="off"><option value="600" selected>$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000">$1,000</option></select>
-            </div>
-            <!-- hidden show-appointment price control: opens from the second tiny square. Default $150; resets on reload. Not linked to the calculator. -->
-            <div class="cs-secret-panel" id="cs-secret-panel-2" hidden>
-              <label for="cs-show-select">Show appointment</label>
-              <select id="cs-show-select" autocomplete="off"><option value="150" selected>$150</option><option value="200">$200</option><option value="250">$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
             </div>
           </div>
         </section>
@@ -328,7 +333,14 @@
             secretPanel.hidden = !secretPanel.hidden;
             secretToggle.setAttribute('aria-expanded', String(!secretPanel.hidden));
           });
-          feeSel.addEventListener('change', function () { TECH_FEE = +feeSel.value; update(perDayNow); });
+          var calcFee = document.getElementById('roi-fee'), calcPrice = document.getElementById('roi-price');   // the matching controls up in the calculator
+          feeSel.addEventListener('change', function () {
+            TECH_FEE = +feeSel.value; update(perDayNow);
+            if (calcFee) calcFee.value = feeSel.value;
+          });
+          if (calcFee) calcFee.addEventListener('change', function () {
+            feeSel.value = calcFee.value; TECH_FEE = +feeSel.value; update(perDayNow);
+          });
 
           // second hidden control: the tiny square beside the first opens a "Show appointment" price dropdown (no longer linked to the calculator)
           var showToggle = document.getElementById('cs-secret-toggle-2'), showPanel = document.getElementById('cs-secret-panel-2'), showSel = document.getElementById('cs-show-select');
@@ -339,15 +351,29 @@
             showPanel.hidden = !showPanel.hidden;
             showToggle.setAttribute('aria-expanded', String(!showPanel.hidden));
           });
-          showSel.addEventListener('change', setShow);
+          showSel.addEventListener('change', function () {
+            setShow();
+            // also move the calculator's cost per show, so its Erevoss Cost / ROI follow
+            if (calcPrice) { calcPrice.value = showSel.value; calcPrice.dispatchEvent(new Event('change')); }
+          });
+          // and the other way round: changing the calculator's cost per show moves the card
+          if (calcPrice) calcPrice.addEventListener('change', function () { showSel.value = calcPrice.value; setShow(); });
 
-          // click an orange tick (work rows only) to open / close its list
+          // click an orange tick to open / close its list. Accordion: opening one closes the one that was open,
+          // so the card stays short while screen-sharing. (To allow several open at once, delete the "close the others" loop.)
+          var setOpen = function (btn, open) {
+            btn.setAttribute('aria-expanded', String(open));
+            document.getElementById(btn.getAttribute('aria-controls')).classList.toggle('open', open);
+          };
           document.getElementById('cost-stack').addEventListener('click', function (e) {
             var btn = e.target.closest('.cs-tick');
             if (!btn) return;
             var open = btn.getAttribute('aria-expanded') === 'true';
-            btn.setAttribute('aria-expanded', String(!open));
-            document.getElementById(btn.getAttribute('aria-controls')).classList.toggle('open', !open);
+            if (!open) {
+              // close the others
+              Array.prototype.forEach.call(document.querySelectorAll('#cost-stack .cs-tick[aria-expanded="true"]'), function (other) { setOpen(other, false); });
+            }
+            setOpen(btn, !open);
           });
         })();
         </script>

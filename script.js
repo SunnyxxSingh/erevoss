@@ -95,6 +95,16 @@
       priceSel.addEventListener("change", () => { PRICE_PER_MEETING = +priceSel.value; calc(); });
     }
 
+    // second hidden square (roi.html only): shows / hides the tech fee dropdown
+    const feeToggle = document.getElementById("roi-fee-toggle");
+    const feePanel = document.getElementById("roi-fee-panel");
+    if (feeToggle && feePanel) {
+      feeToggle.addEventListener("click", () => {
+        feePanel.hidden = !feePanel.hidden;
+        feeToggle.setAttribute("aria-expanded", String(!feePanel.hidden));
+      });
+    }
+
     const STOPS = [1000, 2000, 3000, 5000, 10000];
     const REPLY = 0.01, POSITIVE = 0.05, BOOK = 0.40, DAYS = 22;
 
