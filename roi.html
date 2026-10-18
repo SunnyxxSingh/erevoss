@@ -100,55 +100,255 @@
           </section>
         </div>
 
+      </div>
+
+      <div class="wrap cost-wrap">
+        <div class="cost-compare">
         <!-- COST COLUMN: what it costs to do all of this yourself (the tech, then the work). Same card look as "What You Do" on the homepage.
              Edit prices, quantities and rates in the TECH and WORK lists in the script below. -->
         <section class="cost-stack reveal d2" id="cost-stack" aria-labelledby="cs-title">
-          <h2 class="cmp-label other" id="cs-title">Sending 1,000 emails a day <span>(Doing it all yourself)</span></h2>
+          <h2 class="cmp-label other" id="cs-title">Sending <em id="cs-vol">1,000</em> emails a day <span>(Doing it all yourself)</span></h2>
           <div class="cmp-card other">
-            <div class="cs-group-head"><span class="cs-group">The tech</span><span class="cs-sub-total" id="cs-sub-tech"></span></div>
-            <ul class="cmp-list cs-list" id="cs-list-tech"></ul>
+            <div class="cs-group-head cs-head-all"><span class="cs-group">Build and run yourself</span></div>
 
-            <div class="cs-divider" aria-hidden="true"></div>
+            <div class="cs-col">
+              <ul class="cmp-list cs-list" id="cs-list-1"></ul>
+            </div>
 
-            <div class="cs-group-head"><span class="cs-group">The work</span><span class="cs-sub-total" id="cs-sub-work"></span></div>
-            <ul class="cmp-list cs-list" id="cs-list-work"></ul>
+            <div class="cs-col">
+              <ul class="cmp-list cs-list" id="cs-list-2"></ul>
+            </div>
 
-            <div class="cs-total"><span>Typical monthly total</span><strong id="cs-total"></strong></div>
+            <div class="cs-total"><span>Estimated monthly operating cost</span><div class="cs-total-amt"><strong id="cs-total"></strong></div></div>
+            <p class="cs-disclaimer">Illustrative costs based on operating a cold email system sending up to <select class="cs-vol-select" id="cs-vol-select" aria-label="Emails per day" autocomplete="off"><option value="1000" selected>1,000</option><option value="2000">2,000</option><option value="3000">3,000</option><option value="4000">4,000</option><option value="5000">5,000</option><option value="10000">10,000</option></select> emails per day. Actual costs vary by provider, campaign complexity and staffing.<button type="button" class="cs-secret-toggle" id="cs-secret-toggle" aria-expanded="false" aria-controls="cs-secret-panel" aria-label="Adjust tech fee"></button><button type="button" class="cs-secret-toggle" id="cs-secret-toggle-2" aria-expanded="false" aria-controls="cs-secret-panel-2" aria-label="Adjust show appointment price"></button></p>
+            <!-- hidden tech fee control (for live demos): opens from the tiny square at the end of the small print above. Resets on reload. -->
+            <div class="cs-secret-panel" id="cs-secret-panel" hidden>
+              <label for="cs-fee-select">Tech fee per 1,000 emails</label>
+              <select id="cs-fee-select" autocomplete="off"><option value="600" selected>$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option><option value="1000">$1,000</option></select>
+            </div>
+            <!-- hidden show-appointment price control: opens from the second tiny square. Default $150; resets on reload. Not linked to the calculator. -->
+            <div class="cs-secret-panel" id="cs-secret-panel-2" hidden>
+              <label for="cs-show-select">Show appointment</label>
+              <select id="cs-show-select" autocomplete="off"><option value="150" selected>$150</option><option value="200">$200</option><option value="250">$250</option><option value="300">$300</option><option value="350">$350</option><option value="400">$400</option><option value="500">$500</option><option value="600">$600</option><option value="700">$700</option><option value="800">$800</option><option value="900">$900</option></select>
+            </div>
           </div>
         </section>
+
+        <!-- IF I DO IT FOR YOU: the done-for-you offer next to the do-it-yourself costs.
+             Tech fee is typed in here; the per-show price follows the calculator above (including the hidden price dropdown). -->
+        <section class="cost-stack cost-lite reveal d3" id="do-it-for-you" aria-labelledby="cs2-title">
+          <h2 class="cmp-label us" id="cs2-title">Done For You by Erevoss <span>(Everything handled)</span></h2>
+          <div class="cmp-card us">
+            <ul class="cmp-list cs-list">
+              <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Tech fee</span></div><span class="cs-amt"><span id="cs-tech-fee">$600</span><small>/mo</small></span></li>
+              <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Management retainer</span></div><span class="cs-amt">$0<small>/mo</small></span></li>
+              <li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">Show appointment</span></div><span class="cs-amt"><span id="cs-show-price">$150</span><small>/show</small></span></li>
+            </ul>
+          </div>
+        </section>
+        </div>
         <script>
-        /* EDIT HERE: one entry per row. monthly = cost per month (can be a calculation, e.g. hours * rate).
-           The rows, section subtotals and the grand total all recalculate. */
+        /* EDIT HERE. The left card is one list: TECH lines first, then WORK lines. Every price below is for 1,000 emails a day; the dropdown in the small print under the total multiplies
+           them (2,000 = x2 ... 10,000 = x10). monthly = cost per month at 1,000 a day. detail / bullet text can be a
+           function of m (the multiplier) when it contains a quantity that grows with volume. */
         (function () {
           var TECH = [
-            { name: 'Domains',            detail: '<b>20</b> domains × $22.99 a year (GoDaddy .com)',       monthly: 20 * 22.99 / 12 },
-            { name: 'Mailboxes',          detail: '<b>40</b> mailboxes (2 per domain) × $2.50',             monthly: 40 * 2.50 },
-            { name: 'Sending platform',   detail: 'Instantly <b>Hypergrowth</b> plan',                      monthly: 97 },
-            { name: 'Lead database',      detail: 'Blitz API',                                              monthly: 399 },
-            { name: 'Email verification', detail: '<b>10,000</b> Leads (Triple Verified)',        monthly: 234 }
+            { name: 'Domains',            detail: function (m) { return '<b>' + fmt(20 * m) + '</b> domains × $22.99 a year (GoDaddy .com)'; }, monthly: 38,
+              bullets: [
+                function (m) { return 'Purchases ' + fmt(20 * m) + ' separate domains specifically for cold email outreach.'; },
+                'Protects your main business domain by keeping outreach separate.',
+                'Spreads sending activity across multiple domains.',
+                'Configures DNS records to authenticate outgoing emails.',
+                'Sets up domain forwarding to your main business website.',
+                'Renews domains annually to keep campaigns running.'
+              ] },
+            { name: 'Mailboxes',          detail: function (m) { return '<b>' + fmt(40 * m) + '</b> mailboxes (2 per domain) × $2.50'; },        monthly: 100,
+              bullets: [
+                function (m) { return 'Creates ' + fmt(40 * m) + ' professional email accounts across ' + fmt(20 * m) + ' domains.'; },
+                'Uses two mailboxes per domain to distribute sending volume.',
+                'Configures each mailbox with its own sending identity.',
+                function (m) { return 'Connects all ' + fmt(40 * m) + ' mailboxes to the sending platform.'; },
+                'Gradually ramps up sending volumes for new mailboxes.',
+                'Maintains mailbox subscriptions and access.'
+              ] },
+            { name: 'Sending platform',   detail: 'Instantly <b>Hypergrowth</b> plan',                                                              monthly: 97,
+              bullets: [
+                'Connects and manages all sending accounts in one dashboard.',
+                'Automates personalised cold emails to thousands of prospects.',
+                'Schedules follow-up emails when prospects don\'t respond.',
+                'Distributes sending volume across multiple mailboxes.',
+                'Tracks replies, bounce rates and campaign performance.',
+                'Organises incoming replies so interested prospects can be managed.'
+              ] },
+            { name: 'Lead database',      detail: 'Blitz API',                                                                                      monthly: 399,
+              bullets: [
+                'Provides access to business and professional contact information.',
+                'Finds companies matching your target industry and location.',
+                'Identifies business owners and relevant decision-makers.',
+                'Retrieves available professional email addresses and contact details.',
+                'Helps enrich incomplete prospect records with additional information.',
+                'Supplies contact data for building targeted outreach lists.'
+              ] },
+            { name: 'Email verification', detail: function (m) { return '<b>' + fmt(10000 * m) + '</b> Leads (Triple Verified)'; },              monthly: 234,
+              bullets: [
+                'Checks email addresses before they\'re added to campaigns.',
+                'Validates email formatting and domain configuration.',
+                'Tests whether receiving mail servers appear to accept messages.',
+                'Flags invalid, risky or potentially undeliverable addresses.',
+                'Uses multiple verification checks to improve list quality.',
+                'Helps reduce unnecessary bounces and protect sender reputation.'
+              ] }
           ];
+          // bullets = what the click-to-open list under that row's orange tick shows
           var WORK = [
-            { name: 'Infrastructure upkeep',         detail: '',                                         monthly: 80 },
-            { name: 'Finding and verifying leads',   detail: '',                                         monthly: 120 },
-            { name: 'Email copywriting',             detail: '',                                         monthly: 210 },
-            { name: 'Monitoring and deliverability', detail: '',                                         monthly: 120 },
-            { name: 'Inbox manager',                 detail: 'Replies and qualifying',                   monthly: 200 },
-            { name: 'Booking and no-shows',          detail: 'Calendar, reminders, rebooking',           monthly: 80 },
-            { name: 'Reporting and optimisation',    detail: '',                                         monthly: 240 }
+            { name: 'Infrastructure upkeep', detail: '', monthly: 80,
+              bullets: [
+                function (m) { return 'Checks that all ' + fmt(20 * m) + ' domains and ' + fmt(40 * m) + ' mailboxes are working.'; },
+                'Monitors mailbox connections and fixes disconnected accounts.',
+                'Checks SPF, DKIM and DMARC authentication records.',
+                'Replaces damaged or unusable sending inboxes when necessary.',
+                'Maintains sending schedules and makes sure inboxes aren\'t overloaded.'
+              ] },
+            { name: 'Finding and verifying leads', detail: '', monthly: 120,
+              bullets: [
+                'Identifies companies matching the client\'s ideal customer profile.',
+                'Finds owners, founders, CEOs or other decision-makers.',
+                'Uses databases such as ListKit, Apollo or BlitzAPI.',
+                'Removes duplicates and irrelevant companies.',
+                'Verifies email addresses to reduce bounces.',
+                'Uploads qualified prospects into the sending platform.'
+              ] },
+            { name: 'Email copywriting', detail: '', monthly: 210,
+              bullets: [
+                'Researches the client\'s offer and target audience.',
+                'Writes compelling subject lines.',
+                'Creates the initial cold email.',
+                'Writes two or three follow-up emails.',
+                'Tests different hooks, offers and calls to action.',
+                'Updates messaging based on prospect responses.'
+              ] },
+            { name: 'Monitoring and deliverability', detail: '', monthly: 120,
+              bullets: [
+                'Monitors bounce rates and sending errors.',
+                'Checks domain and mailbox reputation signals.',
+                'Reviews spam complaints where that data is available.',
+                'Monitors sending volumes.',
+                'Investigates sudden drops in campaign performance.',
+                'Pauses problematic inboxes and adjusts sending behaviour.'
+              ] },
+            { name: 'Inbox manager', detail: 'Replies and qualifying', monthly: 200,
+              bullets: [
+                'Reviews incoming replies.',
+                'Separates interested prospects from uninterested responses.',
+                'Answers questions about the client\'s service.',
+                'Handles basic objections.',
+                'Qualifies prospects against agreed criteria.',
+                'Passes suitable prospects into the booking process.'
+              ] },
+            { name: 'Booking and no-shows', detail: 'Calendar, reminders, rebooking', monthly: 80,
+              bullets: [
+                'Offers available meeting times.',
+                'Books qualified prospects into the client\'s calendar.',
+                'Sends confirmation emails and reminders.',
+                'Checks that prospects have the correct meeting details.',
+                'Follows up with people who cancel or miss their appointments.',
+                'Reschedules when appropriate.'
+              ] },
+            { name: 'Reporting and optimisation', detail: '', monthly: 240,
+              bullets: [
+                'Reviews emails sent, bounces, replies and positive replies.',
+                'Measures meetings booked and attended.',
+                'Compares different industries, audiences and email sequences.',
+                'Identifies campaigns that are underperforming.',
+                'Adjusts targeting, messaging and sending allocation.',
+                'Prepares weekly or monthly performance reports.'
+              ] }
           ];
-          var money = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+
+          var TECH_FEE = 600;   // the "Done For You by Erevoss" tech fee per 1,000 emails a day (default; the hidden control can change it). It scales with volume like everything else.
+          var perDayNow = 1000;
+          var TICK = '<svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+          var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
+          var money = function (n) { return '$' + fmt(n); };
           var sum = function (list) { return list.reduce(function (s, i) { return s + i.monthly; }, 0); };
-          var rows = function (list) {
-            return list.map(function (i) {
-              return '<li><svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="cs-main"><span class="cs-name">' + i.name + '</span>' + (i.detail ? '<span class="cs-detail">' + i.detail + '</span>' : '') + '</div>' +
-                     '<span class="cs-amt">' + money(i.monthly) + '<small>/mo</small></span></li>';
+          var text = function (t, m) { return typeof t === 'function' ? t(m) : t; };
+          var uid = 0;
+
+          // build each list once; update() below changes the numbers in place (so open dropdowns stay open)
+          var build = function (list, host) {
+            host.innerHTML = list.map(function (i) {
+              var drop = '', tick = TICK;
+              if (i.bullets) {
+                var id = 'cs-drop-' + (++uid);
+                tick = '<button type="button" class="cs-tick" aria-expanded="false" aria-controls="' + id + '" aria-label="Show what is included in ' + i.name + '">' + TICK + '</button>';
+                drop = '<div class="cs-drop" id="' + id + '"><div><ul class="cs-bullets">' +
+                       i.bullets.map(function () { return '<li></li>'; }).join('') + '</ul></div></div>';
+              }
+              return '<li>' + tick + '<div class="cs-main"><span class="cs-name">' + i.name + '</span><span class="cs-detail"></span></div>' +
+                     '<span class="cs-amt"></span>' + drop + '</li>';
             }).join('');
           };
-          document.getElementById('cs-list-tech').innerHTML = rows(TECH);
-          document.getElementById('cs-list-work').innerHTML = rows(WORK);
-          document.getElementById('cs-sub-tech').textContent = money(sum(TECH)) + '/mo';
-          document.getElementById('cs-sub-work').textContent = money(sum(WORK)) + '/mo';
-          document.getElementById('cs-total').innerHTML = money(sum(TECH) + sum(WORK)) + '<small>/mo</small>';
+          var fill = function (list, host, m) {
+            Array.prototype.forEach.call(host.children, function (li, n) {
+              var i = list[n], d = li.querySelector('.cs-detail');
+              var dt = text(i.detail, m);
+              d.innerHTML = dt; d.style.display = dt ? '' : 'none';
+              li.querySelector('.cs-amt').innerHTML = money(i.monthly * m) + '<small>/mo</small>';
+              if (i.bullets) Array.prototype.forEach.call(li.querySelectorAll('.cs-bullets li'), function (b, k) { b.textContent = text(i.bullets[k], m); });
+            });
+          };
+          // one continuous list: the 5 tech lines then the 7 work lines, shown 6 + 6 in two columns on wide screens
+          var ALL = TECH.concat(WORK), FIRST = ALL.slice(0, 6), SECOND = ALL.slice(6);
+          var hostA = document.getElementById('cs-list-1'), hostB = document.getElementById('cs-list-2');
+          build(FIRST, hostA);
+          build(SECOND, hostB);
+
+          var update = function (perDay) {
+            perDayNow = perDay;
+            var m = perDay / 1000;
+            fill(FIRST, hostA, m);
+            fill(SECOND, hostB, m);
+            var all = sum(ALL) * m;
+            document.getElementById('cs-total').innerHTML = money(all) + '<small>/mo</small>';
+            document.getElementById('cs-tech-fee').textContent = money(TECH_FEE * m);
+            document.getElementById('cs-vol').textContent = fmt(perDay);
+            // size the dropdown to the number shown, so there's no gap before "emails per day"
+            var sel = document.getElementById('cs-vol-select');
+            sel.style.width = 'calc(' + (sel.options[sel.selectedIndex].text.replace(/\D/g, '').length + 0.5) + 'ch + 6px)';
+          };
+          update(+document.getElementById('cs-vol-select').value || 1000);
+
+          // the "1,000" in the small print under the total is a dropdown: pick a volume and everything is multiplied
+          document.getElementById('cs-vol-select').addEventListener('change', function (e) { update(+e.target.value); });
+
+          // hidden tech fee control: the tiny square at the end of the small print shows / hides a dropdown
+          var secretToggle = document.getElementById('cs-secret-toggle'), secretPanel = document.getElementById('cs-secret-panel'), feeSel = document.getElementById('cs-fee-select');
+          TECH_FEE = +feeSel.value || TECH_FEE;
+          secretToggle.addEventListener('click', function () {
+            secretPanel.hidden = !secretPanel.hidden;
+            secretToggle.setAttribute('aria-expanded', String(!secretPanel.hidden));
+          });
+          feeSel.addEventListener('change', function () { TECH_FEE = +feeSel.value; update(perDayNow); });
+
+          // second hidden control: the tiny square beside the first opens a "Show appointment" price dropdown (no longer linked to the calculator)
+          var showToggle = document.getElementById('cs-secret-toggle-2'), showPanel = document.getElementById('cs-secret-panel-2'), showSel = document.getElementById('cs-show-select');
+          var showPrice = document.getElementById('cs-show-price');
+          var setShow = function () { showPrice.textContent = '$' + showSel.value; };
+          setShow();
+          showToggle.addEventListener('click', function () {
+            showPanel.hidden = !showPanel.hidden;
+            showToggle.setAttribute('aria-expanded', String(!showPanel.hidden));
+          });
+          showSel.addEventListener('change', setShow);
+
+          // click an orange tick (work rows only) to open / close its list
+          document.getElementById('cost-stack').addEventListener('click', function (e) {
+            var btn = e.target.closest('.cs-tick');
+            if (!btn) return;
+            var open = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!open));
+            document.getElementById(btn.getAttribute('aria-controls')).classList.toggle('open', !open);
+          });
         })();
         </script>
       </div>
