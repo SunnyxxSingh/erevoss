@@ -639,3 +639,15 @@ section[id]{scroll-margin-top:110px;}
 .ty-final .btn{margin-top:var(--sp-2);}
 .ty-final small{display:block;margin-top:var(--sp-2);color:#777;font-size:0.92rem;}
 @media (max-width:640px){ .ty-final{padding:var(--sp-4) var(--sp-3);} .ty-meet{flex-wrap:wrap;} .ty-h2-3{margin-top:var(--sp-6);} }
+
+/* hand-drawn "keep scrolling" marker note: sits in the empty space left of the screenshot's caption, takes up no height so step 2 stays put */
+.ty-scroll{position:relative;height:0;}
+.ty-scroll-in{position:absolute;left:0;bottom:-5.2rem;display:flex;flex-direction:column;align-items:flex-start;gap:0.3rem;text-align:left;transform:rotate(-3deg);}
+.ty-scroll span{font-family:'Caveat','Segoe Script',cursive;font-weight:700;font-size:clamp(1.9rem,1.5rem + 1.4vw,2.5rem);line-height:1.02;color:#111;white-space:nowrap;}
+.ty-scroll svg{margin-left:1.4rem;width:40px;height:auto;}
+.ty-scroll svg path{stroke:#111;}
+@media (max-width:640px){
+  .ty-scroll{height:auto;margin:calc(var(--sp-4) * -1) 0 var(--sp-3);}
+  .ty-scroll-in{position:static;}
+  .ty-scroll span{font-size:1.9rem;}
+}
