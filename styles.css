@@ -607,7 +607,7 @@ section[id]{scroll-margin-top:110px;}
 .ty-h1 b{font-weight:700;color:var(--accent);}
 .ty-h2{font-family:'Inter',system-ui,sans-serif;font-weight:400;font-size:clamp(1.15rem,1rem + 0.8vw,1.5rem);line-height:1.4;letter-spacing:0;color:#222;margin-bottom:var(--sp-3);text-wrap:balance;}
 .ty-n{color:var(--accent);font-weight:700;}
-.ty-shot{display:block;width:100%;max-width:470px;height:auto;margin:0 auto var(--sp-6);overflow:visible;}
+.ty-shot{display:block;width:100%;max-width:740px;height:auto;margin:0 auto var(--sp-6);overflow:visible;}
 .ty-h2-2{margin-top:var(--sp-4);}
 .ty-videos{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-top:var(--sp-5);text-align:center;}
 .ty-video p{font-size:0.95rem;color:#222;margin-bottom:var(--sp-2);}
