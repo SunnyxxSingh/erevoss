@@ -99,12 +99,14 @@
             </div>
             <hr>
             <div class="rev"><span class="k">Projected revenue</span><span class="v net" id="roi-r-rev"></span></div>
-            <!-- Tech fee, Erevoss Cost, Net profit and ROI: hidden until the third tiny square (next to the other two) is clicked, then they fade in -->
-            <div class="roi-costs" id="roi-costs" aria-hidden="true" inert>
-              <div class="line"><span class="k">Tech fee (Fixed cost)</span><span class="v" id="roi-r-fee"></span></div>
-              <div class="line"><span class="k">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
-              <div class="line"><span class="k">Net profit</span><span class="v net" id="roi-r-net"></span></div>
-              <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
+            <!-- Hidden until the third tiny square is clicked. Click 1 fades in the tech fee; click 2 fades in Erevoss Cost, Net profit and ROI; click 3 hides them again. -->
+            <div class="roi-costs" id="roi-costs" data-step="0">
+              <div class="line roi-s1" aria-hidden="true" inert><span class="k">Tech fee (Fixed cost)</span><span class="v" id="roi-r-fee"></span></div>
+              <div class="roi-s2" aria-hidden="true" inert>
+                <div class="line"><span class="k" id="roi-r-cost-label">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
+                <div class="line"><span class="k">Net profit</span><span class="v net" id="roi-r-net"></span></div>
+                <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
+              </div>
             </div>
             <a class="main-btn book" href="/#contact">Book a Call</a>
           </section>

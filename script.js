@@ -105,16 +105,22 @@
       });
     }
 
-    // third hidden square (roi.html only): fades the costs block (tech fee, Erevoss cost, net profit, ROI) in and out. Hidden by default.
+    // third hidden square (roi.html only): staged reveal of the costs. Hidden by default.
+    // click 1 = tech fee fades in, click 2 = Erevoss cost, net profit and ROI fade in, click 3 = hide everything again.
     const costsToggle = document.getElementById("roi-costs-toggle");
     const costsBox = document.getElementById("roi-costs");
     if (costsToggle && costsBox) {
+      const stages = [costsBox.querySelector(".roi-s1"), costsBox.querySelector(".roi-s2")];
+      let step = 0;
       costsToggle.addEventListener("click", () => {
-        const show = !costsBox.classList.contains("shown");
-        costsBox.classList.toggle("shown", show);
-        costsBox.setAttribute("aria-hidden", String(!show));
-        if (show) costsBox.removeAttribute("inert"); else costsBox.setAttribute("inert", "");
-        costsToggle.setAttribute("aria-expanded", String(show));
+        step = (step + 1) % 3;
+        costsBox.dataset.step = String(step);
+        stages.forEach((el, i) => {
+          const on = step > i;
+          el.setAttribute("aria-hidden", String(!on));
+          if (on) el.removeAttribute("inert"); else el.setAttribute("inert", "");
+        });
+        costsToggle.setAttribute("aria-expanded", String(step > 0));
       });
     }
 
@@ -228,6 +234,7 @@
       const plus = feeOut ? "+ " : "", minus = feeOut ? "− " : "";
       $("r-rev").textContent = plus + "$" + fmt(revenue);
       $("r-cost").textContent = minus + "$" + fmt(cost) + "/mo";
+      if ($("r-cost-label")) $("r-cost-label").textContent = "Erevoss Cost ($" + fmt(PRICE_PER_MEETING) + " per show)";   // follows the hidden cost-per-show dropdown
       if (feeOut) feeOut.textContent = minus + "$" + fmt(fee) + "/mo";
       if ($("r-net")) { $("r-net").textContent = (netProfit < 0 ? "-$" : "$") + fmt(Math.abs(netProfit)); $("r-net").classList.toggle("neg", netProfit < 0); }
       $("r-roi").textContent = fmt(roi) + "%";

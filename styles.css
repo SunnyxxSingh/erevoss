@@ -315,10 +315,14 @@ section{padding-block:var(--sp-7);position:relative;}
 .roi-calc .rev{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .roi-calc .rev .k{font-size:16px;color:var(--r-text);}
 .roi-calc .rev .v{font-family:var(--r-display);font-size:15px;font-weight:400;color:var(--r-muted);font-variant-numeric:tabular-nums;}
-/* costs block on roi.html: space stays reserved while hidden so nothing jumps; it fades in when the third tiny square is clicked */
-.roi-calc .roi-costs{display:grid;gap:16px;opacity:0;visibility:hidden;transition:opacity .7s ease,visibility 0s linear .7s;}
-.roi-calc .roi-costs.shown{opacity:1;visibility:visible;transition:opacity .7s ease,visibility 0s;}
-@media (prefers-reduced-motion:reduce){ .roi-calc .roi-costs,.roi-calc .roi-costs.shown{transition:none;} }
+/* costs block on roi.html: space stays reserved while hidden so nothing jumps. Staged: step 1 fades in the tech fee, step 2 the rest. */
+.roi-calc .roi-costs{display:grid;gap:16px;}
+.roi-calc .roi-s2{display:grid;gap:16px;}
+.roi-calc .roi-s1,.roi-calc .roi-s2{opacity:0;visibility:hidden;transition:opacity .7s ease,visibility 0s linear .7s;}
+.roi-calc .roi-costs[data-step="1"] .roi-s1,
+.roi-calc .roi-costs[data-step="2"] .roi-s1,
+.roi-calc .roi-costs[data-step="2"] .roi-s2{opacity:1;visibility:visible;transition:opacity .7s ease,visibility 0s;}
+@media (prefers-reduced-motion:reduce){ .roi-calc .roi-s1,.roi-calc .roi-s2{transition:none !important;} }
 .roi-calc .line{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .roi-calc .line .k{font-size:16px;color:var(--r-text);}
 .roi-calc .line .v{font-family:var(--r-display);font-size:15px;color:var(--r-muted);font-variant-numeric:tabular-nums;}
