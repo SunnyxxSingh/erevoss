@@ -114,9 +114,38 @@
     const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
     const num = (s) => parseFloat(String(s).replace(/,/g, ""));
 
+    // roi.html only (the page with the tech fee line): the "Showed meetings" number can be typed over, quietly, with no hint that it's editable.
+    // The typed number flows through deals, revenue, cost, net profit and ROI. Touching any slider or number box drops it and goes back to the calculated value.
+    const meetEl = $("r-fee") ? $("r-meet") : null;
+    let meetOverride = null;
+    if (meetEl) {
+      meetEl.contentEditable = "true";
+      meetEl.spellcheck = false;
+      meetEl.setAttribute("inputmode", "numeric");
+      meetEl.style.cursor = "default";
+      meetEl.style.outline = "none";
+      meetEl.addEventListener("input", () => {
+        const d = meetEl.textContent.replace(/\D/g, "").slice(0, 4);
+        if (d !== meetEl.textContent) {
+          meetEl.textContent = d;
+          const r = document.createRange(); r.selectNodeContents(meetEl); r.collapse(false);
+          const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        }
+        meetOverride = d === "" ? null : +d;
+        calc();
+      });
+      meetEl.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); meetEl.blur(); } });
+      meetEl.addEventListener("blur", () => { calc(); });   // tidy the text (or put the calculated number back if it was left empty)
+      ["vol", "ltv", "ltv-n", "close", "close-n"].forEach((id) => {
+        const el = $(id);
+        if (el) el.addEventListener("input", () => { meetOverride = null; });
+      });
+    }
+
     // Emails per day: slider snaps to the five stops
     const vol = $("vol");
     vol.addEventListener("input", calc);
+    if ($("fee")) $("fee").addEventListener("change", calc);
 
     // Build rulers
     const tick = (x, inner) => { const t = document.createElement("div"); t.className = "t"; t.style.setProperty("--x", x); t.appendChild(inner); return t; };
@@ -124,7 +153,7 @@
     ["1k", "2k", "3k", "5k", "10k"].forEach((txt, i) => {
       const b = document.createElement("button");
       b.type = "button"; b.textContent = txt;
-      b.addEventListener("click", () => { vol.value = i; calc(); });
+      b.addEventListener("click", () => { vol.value = i; meetOverride = null; calc(); });
       $("sc-vol").appendChild(tick(i / 4, b));
     });
     const stopTicks = $("sc-vol").querySelectorAll(".t");
@@ -157,18 +186,28 @@
 
       const replies = perDay * DAYS * REPLY;
       const leads = replies * POSITIVE;
-      const meetings = leads * BOOK;
+      const meetings = meetOverride !== null ? meetOverride : leads * BOOK;
       const deals = meetings * close;
       const revenue = deals * ltv;
       const cost = Math.round(meetings) * PRICE_PER_MEETING;
-      const roi = cost > 0 ? (revenue - cost) / cost * 100 : 0;
+      // roi.html only: a monthly tech fee (hidden "Tech fee per 1,000 emails" dropdown, scaled to volume) is on top of the cost per show.
+      // Then: net profit = revenue - cost - fee, and ROI = net profit / total invested. On the homepage there is no fee, so ROI is unchanged.
+      const feeOut = $("r-fee"), feeSel = $("fee");
+      const fee = feeOut && feeSel ? +feeSel.value * perDay / 1000 : 0;
+      const invested = cost + fee;
+      const netProfit = revenue - invested;
+      const roi = invested > 0 ? netProfit / invested * 100 : 0;
 
       $("r-replies").textContent = fmt(replies);
       $("r-leads").textContent = fmt(leads);
-      $("r-meet").textContent = fmt(meetings);
+      if (!(meetEl && document.activeElement === meetEl && meetOverride !== null)) $("r-meet").textContent = fmt(meetings);
       $("r-deals").textContent = fmt(deals);
-      $("r-rev").textContent = "$" + fmt(revenue);
-      $("r-cost").textContent = "$" + fmt(cost) + "/mo";
+      // roi.html only (it has the tech fee line): show the sum as + revenue, - tech fee, - cost per show, = net profit
+      const plus = feeOut ? "+ " : "", minus = feeOut ? "− " : "";
+      $("r-rev").textContent = plus + "$" + fmt(revenue);
+      $("r-cost").textContent = minus + "$" + fmt(cost) + "/mo";
+      if (feeOut) feeOut.textContent = minus + "$" + fmt(fee) + "/mo";
+      if ($("r-net")) { $("r-net").textContent = (netProfit < 0 ? "-$" : "$") + fmt(Math.abs(netProfit)); $("r-net").classList.toggle("neg", netProfit < 0); }
       $("r-roi").textContent = fmt(roi) + "%";
       $("r-roi").classList.toggle("neg", roi < 0);
     }

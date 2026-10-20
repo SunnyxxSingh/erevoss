@@ -310,12 +310,14 @@ section{padding-block:var(--sp-7);position:relative;}
 .roi-calc .card .v.g{color:var(--r-green);}
 .roi-calc hr{border:0;border-top:1px solid var(--r-line);margin:6px 0;}
 
-.roi-calc .rev{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:8px;}
-.roi-calc .rev .k{font-size:16.5px;color:var(--r-text);}
-.roi-calc .rev .v{font-family:var(--r-display);font-size:clamp(32px,5vw,40px);font-weight:700;color:var(--r-head);letter-spacing:-0.02em;font-variant-numeric:tabular-nums;}
+.roi-calc .rev{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.roi-calc .rev .k{font-size:16px;color:var(--r-text);}
+.roi-calc .rev .v{font-family:var(--r-display);font-size:15px;font-weight:400;color:var(--r-muted);font-variant-numeric:tabular-nums;}
 .roi-calc .line{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .roi-calc .line .k{font-size:16px;color:var(--r-text);}
 .roi-calc .line .v{font-family:var(--r-display);font-size:15px;color:var(--r-muted);font-variant-numeric:tabular-nums;}
+.roi-calc .line .v.net{font-size:clamp(32px,5vw,40px);font-weight:700;color:var(--r-head);letter-spacing:-0.02em;line-height:1.1;}
+.roi-calc .line .v.net.neg{color:var(--r-red);}
 .roi-calc .line .v.roi{color:var(--r-green);font-weight:500;}
 .roi-calc .line .v.roi.neg{color:var(--r-red);}
 /* ROI row: about half the size of the projected revenue figure, with the percentage in bold */

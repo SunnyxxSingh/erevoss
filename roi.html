@@ -99,7 +99,9 @@
             </div>
             <hr>
             <div class="rev"><span class="k">Projected revenue</span><span class="v" id="roi-r-rev"></span></div>
+            <div class="line"><span class="k">Tech fee (Fixed cost)</span><span class="v" id="roi-r-fee"></span></div>
             <div class="line"><span class="k">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
+            <div class="line"><span class="k">Net profit</span><span class="v net" id="roi-r-net"></span></div>
             <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
             <a class="main-btn book" href="/#contact">Book a Call</a>
           </section>
@@ -336,7 +338,7 @@
           var calcFee = document.getElementById('roi-fee'), calcPrice = document.getElementById('roi-price');   // the matching controls up in the calculator
           feeSel.addEventListener('change', function () {
             TECH_FEE = +feeSel.value; update(perDayNow);
-            if (calcFee) calcFee.value = feeSel.value;
+            if (calcFee) { calcFee.value = feeSel.value; calcFee.dispatchEvent(new Event('change')); }
           });
           if (calcFee) calcFee.addEventListener('change', function () {
             feeSel.value = calcFee.value; TECH_FEE = +feeSel.value; update(perDayNow);
