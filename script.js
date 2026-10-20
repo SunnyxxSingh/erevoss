@@ -144,8 +144,13 @@
 
     // Emails per day: slider snaps to the five stops
     const vol = $("vol");
+    vol.addEventListener("input", () => { if ($("fee")) { window.__feeOverride = null; window.dispatchEvent(new Event("erevoss-fee")); } });
     vol.addEventListener("input", calc);
-    if ($("fee")) $("fee").addEventListener("change", calc);
+    if ($("fee")) {
+      // picking a rate by hand overrides the volume schedule (the cost card on the page listens too)
+      $("fee").addEventListener("change", () => { window.__feeOverride = +$("fee").value; window.dispatchEvent(new Event("erevoss-fee")); calc(); });
+      window.addEventListener("erevoss-fee", calc);
+    }
 
     // Build rulers
     const tick = (x, inner) => { const t = document.createElement("div"); t.className = "t"; t.style.setProperty("--x", x); t.appendChild(inner); return t; };
@@ -153,7 +158,7 @@
     ["1k", "2k", "3k", "5k", "10k"].forEach((txt, i) => {
       const b = document.createElement("button");
       b.type = "button"; b.textContent = txt;
-      b.addEventListener("click", () => { vol.value = i; meetOverride = null; calc(); });
+      b.addEventListener("click", () => { vol.value = i; meetOverride = null; if ($("fee")) { window.__feeOverride = null; window.dispatchEvent(new Event("erevoss-fee")); } calc(); });
       $("sc-vol").appendChild(tick(i / 4, b));
     });
     const stopTicks = $("sc-vol").querySelectorAll(".t");
@@ -193,7 +198,11 @@
       // roi.html only: a monthly tech fee (hidden "Tech fee per 1,000 emails" dropdown, scaled to volume) is on top of the cost per show.
       // Then: net profit = revenue - cost - fee, and ROI = net profit / total invested. On the homepage there is no fee, so ROI is unchanged.
       const feeOut = $("r-fee"), feeSel = $("fee");
-      const fee = feeOut && feeSel ? +feeSel.value * perDay / 1000 : 0;
+      // volume discount on the tech fee: 100% of the base rate at 1,000/day, then 10% off per extra 1,000/day, never below 70% (2,000/day = $900 per 1,000, 3,000 = $800, 5,000 and 10,000 = $700)
+      // (the hidden "Tech fee per 1,000 emails" dropdown shows the rate in use; picking one by hand overrides the schedule until a volume slider moves)
+      const feeRatePer1k = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.7, 1 - 0.1 * (perDay / 1000 - 1)));
+      const fee = feeOut && feeSel ? feeRatePer1k * perDay / 1000 : 0;
+      if (feeOut && feeSel) feeSel.value = String(feeRatePer1k);
       const invested = cost + fee;
       const netProfit = revenue - invested;
       const roi = invested > 0 ? netProfit / invested * 100 : 0;

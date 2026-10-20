@@ -272,7 +272,7 @@
               ] }
           ];
 
-          var TECH_FEE = 1000;   // the "Done For You by Erevoss" tech fee per 1,000 emails a day (default; the hidden control can change it). It scales with volume like everything else.
+          // (the tech fee is worked out in update() below: volume schedule, or a rate picked in the hidden dropdown)
           var perDayNow = 1000;
           var TICK = '<svg class="cmp-ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
           var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
@@ -317,7 +317,11 @@
             fill(SECOND, hostB, m);
             var all = sum(ALL) * m;
             document.getElementById('cs-total').innerHTML = money(all) + '<small>/mo</small>';
-            document.getElementById('cs-tech-fee').textContent = money(TECH_FEE * m);
+            // tech fee: the rate per 1,000 is the volume schedule (1,000/day = $1,000, then $100 less per extra 1,000, never below $700),
+            // unless the hidden dropdown was used to pick a rate by hand (window.__feeOverride, shared with the calculator)
+            var rate = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.7, 1 - 0.1 * (m - 1)));
+            document.getElementById('cs-tech-fee').textContent = money(rate * m);
+            document.getElementById('cs-fee-select').value = String(rate);
             document.getElementById('cs-vol').textContent = fmt(perDay);
             // size the dropdown to the number shown, so there's no gap before "emails per day"
             var sel = document.getElementById('cs-vol-select');
@@ -326,23 +330,22 @@
           update(+document.getElementById('cs-vol-select').value || 1000);
 
           // the "1,000" in the small print under the total is a dropdown: pick a volume and everything is multiplied
-          document.getElementById('cs-vol-select').addEventListener('change', function (e) { update(+e.target.value); });
+          document.getElementById('cs-vol-select').addEventListener('change', function (e) { window.__feeOverride = null; update(+e.target.value); window.dispatchEvent(new Event('erevoss-fee')); });
 
           // hidden tech fee control: the tiny square at the end of the small print shows / hides a dropdown
           var secretToggle = document.getElementById('cs-secret-toggle'), secretPanel = document.getElementById('cs-secret-panel'), feeSel = document.getElementById('cs-fee-select');
-          TECH_FEE = +feeSel.value || TECH_FEE;
           secretToggle.addEventListener('click', function () {
             secretPanel.hidden = !secretPanel.hidden;
             secretToggle.setAttribute('aria-expanded', String(!secretPanel.hidden));
           });
-          var calcFee = document.getElementById('roi-fee'), calcPrice = document.getElementById('roi-price');   // the matching controls up in the calculator
+                    var calcPrice = document.getElementById('roi-price');   // the matching cost-per-show control up in the calculator
           feeSel.addEventListener('change', function () {
-            TECH_FEE = +feeSel.value; update(perDayNow);
-            if (calcFee) { calcFee.value = feeSel.value; calcFee.dispatchEvent(new Event('change')); }
+            window.__feeOverride = +feeSel.value;
+            update(perDayNow);
+            window.dispatchEvent(new Event('erevoss-fee'));   // tell the calculator
           });
-          if (calcFee) calcFee.addEventListener('change', function () {
-            feeSel.value = calcFee.value; TECH_FEE = +feeSel.value; update(perDayNow);
-          });
+          // the calculator moved its volume (or picked a rate): refresh this card
+          window.addEventListener('erevoss-fee', function () { update(perDayNow); });
 
           // second hidden control: the tiny square beside the first opens a "Show appointment" price dropdown (no longer linked to the calculator)
           var showToggle = document.getElementById('cs-secret-toggle-2'), showPanel = document.getElementById('cs-secret-panel-2'), showSel = document.getElementById('cs-show-select');
