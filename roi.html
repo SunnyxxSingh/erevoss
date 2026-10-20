@@ -317,9 +317,9 @@
             fill(SECOND, hostB, m);
             var all = sum(ALL) * m;
             document.getElementById('cs-total').innerHTML = money(all) + '<small>/mo</small>';
-            // tech fee: the rate per 1,000 is the volume schedule (1,000/day = $1,000, then $100 less per extra 1,000, never below $700),
+            // tech fee: the rate per 1,000 is the volume schedule (1,000/day = $1,000, then $100 less per extra 1,000, never below $800),
             // unless the hidden dropdown was used to pick a rate by hand (window.__feeOverride, shared with the calculator)
-            var rate = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.7, 1 - 0.1 * (m - 1)));
+            var rate = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.8, 1 - 0.1 * (m - 1)));
             document.getElementById('cs-tech-fee').textContent = money(rate * m);
             document.getElementById('cs-fee-select').value = String(rate);
             document.getElementById('cs-vol').textContent = fmt(perDay);

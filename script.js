@@ -198,9 +198,9 @@
       // roi.html only: a monthly tech fee (hidden "Tech fee per 1,000 emails" dropdown, scaled to volume) is on top of the cost per show.
       // Then: net profit = revenue - cost - fee, and ROI = net profit / total invested. On the homepage there is no fee, so ROI is unchanged.
       const feeOut = $("r-fee"), feeSel = $("fee");
-      // volume discount on the tech fee: 100% of the base rate at 1,000/day, then 10% off per extra 1,000/day, never below 70% (2,000/day = $900 per 1,000, 3,000 = $800, 5,000 and 10,000 = $700)
+      // volume discount on the tech fee: 100% of the base rate at 1,000/day, then 10% off per extra 1,000/day, never below 80% (2,000/day = $900 per 1,000; 3,000 and everything above = $800)
       // (the hidden "Tech fee per 1,000 emails" dropdown shows the rate in use; picking one by hand overrides the schedule until a volume slider moves)
-      const feeRatePer1k = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.7, 1 - 0.1 * (perDay / 1000 - 1)));
+      const feeRatePer1k = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.8, 1 - 0.1 * (perDay / 1000 - 1)));
       const fee = feeOut && feeSel ? feeRatePer1k * perDay / 1000 : 0;
       if (feeOut && feeSel) feeSel.value = String(feeRatePer1k);
       const invested = cost + fee;
