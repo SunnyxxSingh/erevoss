@@ -105,6 +105,19 @@
       });
     }
 
+    // third hidden square (roi.html only): fades the costs block (tech fee, Erevoss cost, net profit, ROI) in and out. Hidden by default.
+    const costsToggle = document.getElementById("roi-costs-toggle");
+    const costsBox = document.getElementById("roi-costs");
+    if (costsToggle && costsBox) {
+      costsToggle.addEventListener("click", () => {
+        const show = !costsBox.classList.contains("shown");
+        costsBox.classList.toggle("shown", show);
+        costsBox.setAttribute("aria-hidden", String(!show));
+        if (show) costsBox.removeAttribute("inert"); else costsBox.setAttribute("inert", "");
+        costsToggle.setAttribute("aria-expanded", String(show));
+      });
+    }
+
     const STOPS = [1000, 2000, 3000, 5000, 10000];
     const REPLY = 0.01, POSITIVE = 0.05, BOOK = 0.40, DAYS = 22;
 

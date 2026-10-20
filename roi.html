@@ -75,7 +75,7 @@
 
             <div class="assume">
               <b>Conservative assumption</b>
-              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button><button type="button" class="price-toggle" id="roi-fee-toggle" aria-expanded="false" aria-controls="roi-fee-panel" aria-label="Adjust tech fee"></button></span>
+              <span>1% reply rate · 5% positive · 40% book a meeting<br>22 sending days/mo<button type="button" class="price-toggle" id="roi-price-toggle" aria-expanded="false" aria-controls="roi-price-panel" aria-label="Adjust cost per show"></button><button type="button" class="price-toggle" id="roi-fee-toggle" aria-expanded="false" aria-controls="roi-fee-panel" aria-label="Adjust tech fee"></button><button type="button" class="price-toggle" id="roi-costs-toggle" aria-expanded="false" aria-controls="roi-costs" aria-label="Show costs and ROI"></button></span>
               <!-- hidden price control (for live demos): opens from the tiny square above. Default on this page is $150 (data-default-price above) -->
               <div class="price-panel" id="roi-price-panel" hidden>
                 <label for="roi-price">Cost per show</label>
@@ -98,11 +98,14 @@
               <div class="card"><span class="k">Deals closed</span><span class="v" id="roi-r-deals"></span></div>
             </div>
             <hr>
-            <div class="rev"><span class="k">Projected revenue</span><span class="v" id="roi-r-rev"></span></div>
-            <div class="line"><span class="k">Tech fee (Fixed cost)</span><span class="v" id="roi-r-fee"></span></div>
-            <div class="line"><span class="k">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
-            <div class="line"><span class="k">Net profit</span><span class="v net" id="roi-r-net"></span></div>
-            <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
+            <div class="rev"><span class="k">Projected revenue</span><span class="v net" id="roi-r-rev"></span></div>
+            <!-- Tech fee, Erevoss Cost, Net profit and ROI: hidden until the third tiny square (next to the other two) is clicked, then they fade in -->
+            <div class="roi-costs" id="roi-costs" aria-hidden="true" inert>
+              <div class="line"><span class="k">Tech fee (Fixed cost)</span><span class="v" id="roi-r-fee"></span></div>
+              <div class="line"><span class="k">Erevoss Cost</span><span class="v" id="roi-r-cost"></span></div>
+              <div class="line"><span class="k">Net profit</span><span class="v net" id="roi-r-net"></span></div>
+              <div class="line roi-line"><span class="k">ROI</span><span class="v roi" id="roi-r-roi"></span></div>
+            </div>
             <a class="main-btn book" href="/#contact">Book a Call</a>
           </section>
         </div>

@@ -313,9 +313,14 @@ section{padding-block:var(--sp-7);position:relative;}
 .roi-calc .rev{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .roi-calc .rev .k{font-size:16px;color:var(--r-text);}
 .roi-calc .rev .v{font-family:var(--r-display);font-size:15px;font-weight:400;color:var(--r-muted);font-variant-numeric:tabular-nums;}
+/* costs block on roi.html: space stays reserved while hidden so nothing jumps; it fades in when the third tiny square is clicked */
+.roi-calc .roi-costs{display:grid;gap:16px;opacity:0;visibility:hidden;transition:opacity .7s ease,visibility 0s linear .7s;}
+.roi-calc .roi-costs.shown{opacity:1;visibility:visible;transition:opacity .7s ease,visibility 0s;}
+@media (prefers-reduced-motion:reduce){ .roi-calc .roi-costs,.roi-calc .roi-costs.shown{transition:none;} }
 .roi-calc .line{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .roi-calc .line .k{font-size:16px;color:var(--r-text);}
 .roi-calc .line .v{font-family:var(--r-display);font-size:15px;color:var(--r-muted);font-variant-numeric:tabular-nums;}
+.roi-calc .rev .v.net{font-size:clamp(20px,3.4vw,24px);font-weight:700;color:var(--r-head);letter-spacing:-0.02em;line-height:1.1;}
 .roi-calc .line .v.net{font-size:clamp(32px,5vw,40px);font-weight:700;color:var(--r-head);letter-spacing:-0.02em;line-height:1.1;}
 .roi-calc .line .v.net.neg{color:var(--r-red);}
 .roi-calc .line .v.roi{color:var(--r-green);font-weight:500;}
