@@ -39,7 +39,7 @@
       <div class="wrap roi-calc">
         <div class="title reveal">
           <h1 id="roi-title">Calculate your ROI</h1>
-          <p>Plug in your numbers. See what 1,000 cold emails per day can do for your business.</p>
+          <p>Plug in your numbers. See what cold email can do for your business.</p>
         </div>
 
         <div class="calc reveal d1">
@@ -51,7 +51,7 @@
                 <label for="roi-vol">Emails per day <i class="tip" tabindex="0">i<span>How many cold emails go out each sending day.</span></i></label>
                 <span class="now" id="roi-vol-v">1,000/day</span>
               </div>
-              <input id="roi-vol" type="range" min="0" max="4" step="1" value="0" aria-label="Emails per day" aria-valuetext="1,000 per day">
+              <input id="roi-vol" type="range" min="0" max="4" step="1" value="2" autocomplete="off" aria-label="Emails per day" aria-valuetext="3,000 per day">
               <div class="scale" id="roi-sc-vol" role="group" aria-label="Emails per day presets"></div>
             </div>
 
@@ -112,6 +112,34 @@
           </section>
         </div>
 
+      </div>
+
+      <!-- RECOMMENDATIONS (for calls): its own heading, then the faint 1K..10K toggles. Click one and a summary card for that volume appears; click again and it goes.
+           Any number of cards at once. Numbers follow the calculator above (LTV, close rate, cost per show, tech fee). -->
+      <div class="wrap roi-calc roi-reco" id="recommendations">
+        <div class="title reveal">
+          <h2 id="reco-title">Recommendations</h2>
+          <p>Compare different packages.</p>
+        </div>
+        <div class="opt-wrap" id="roi-options-wrap">
+          <div class="opt-picks" role="group" aria-label="Compare packages">
+            <button type="button" class="opt-pick" data-i="0" aria-pressed="false">1K</button>
+            <button type="button" class="opt-pick" data-i="1" aria-pressed="false">2K</button>
+            <button type="button" class="opt-pick" data-i="2" aria-pressed="false">3K</button>
+            <button type="button" class="opt-pick" data-i="3" aria-pressed="false">4K</button>
+            <button type="button" class="opt-pick" data-i="4" aria-pressed="false">5K</button>
+            <button type="button" class="opt-pick" data-i="5" aria-pressed="false">10K</button>
+          </div>
+          <div class="opt-cards" id="roi-options" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <!-- heading for the cost comparison below (edit the wording here) -->
+      <div class="wrap roi-calc roi-reco" id="cost-compare-heading">
+        <div class="title reveal">
+          <h2 id="cost-compare-title">Checklist</h2>
+          <p>Doing it yourself vs. done for you by Erevoss.</p>
+        </div>
       </div>
 
       <div class="wrap cost-wrap">

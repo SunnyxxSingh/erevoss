@@ -196,6 +196,80 @@
       n.addEventListener("blur", () => { const v = num(n.value); const c = isFinite(v) ? clamp(v, min, max) : +r.value; r.value = c; n.value = show(c); calc(); });
     });
 
+    // ---- Option cards (roi.html only): hidden toggles under the calculator, one summary card per volume picked ----
+    let curLtv = 0, curClose = 0;
+    const optBox = document.getElementById("roi-options");
+    const optOn = new Set();
+    const optCards = {};
+    // one line under each volume: edit freely
+    const OPT_VOLUMES = [1000, 2000, 3000, 4000, 5000, 10000];
+    const OPTION_NOTES = ["If you want to start steady", "If you want steady growth", "If you want that faster growth", "If you want to push harder", "If you want to scale hard", "If you want maximum volume"];
+    const money = (n) => (n < 0 ? "-$" : "$") + fmt(Math.abs(n));
+    function optNumbers(perDay) {
+      const meetings = perDay * DAYS * REPLY * POSITIVE * BOOK;
+      const cost = Math.round(meetings) * PRICE_PER_MEETING;
+      const rate = window.__feeOverride != null ? window.__feeOverride : Math.round(1000 * Math.max(0.8, 1 - 0.1 * (perDay / 1000 - 1)));
+      const fee = rate * perDay / 1000;
+      const revenue = meetings * curClose * curLtv;
+      const invested = cost + fee;
+      const net = revenue - invested;
+      return { meetings, fee, revenue, net, roi: invested > 0 ? net / invested * 100 : 0 };
+    }
+    function renderOptions() {
+      if (!optBox) return;
+      let n = 0;
+      OPT_VOLUMES.forEach((perDay, i) => {
+        const card = optCards[i];
+        if (!card) return;
+        n += 1;
+        const o = optNumbers(perDay);
+        card.style.order = String(i);
+        card.querySelector(".opt-tag").textContent = "Option " + String.fromCharCode(64 + n);   // Option A, B, C ... in volume order
+        card.querySelector(".opt-vol").textContent = fmt(perDay) + " emails a day";
+        card.querySelector(".opt-note").textContent = OPTION_NOTES[i];
+        card.querySelector(".o-tech").textContent = "$" + fmt(o.fee) + "/month";
+        card.querySelector(".o-appt").textContent = "$" + fmt(PRICE_PER_MEETING);
+        card.querySelector(".o-meet").textContent = fmt(o.meetings);
+        card.querySelector(".o-rev").textContent = "$" + fmt(o.revenue);
+        const net = card.querySelector(".o-net"), roi = card.querySelector(".o-roi");
+        net.textContent = money(o.net); net.classList.toggle("neg", o.net < 0);
+        roi.textContent = fmt(o.roi) + "%"; roi.classList.toggle("neg", o.roi < 0); roi.classList.toggle("g", o.roi >= 0);
+      });
+    }
+    function makeCard(i) {
+      const c = document.createElement("article");
+      c.className = "opt-card";
+      c.innerHTML =
+        '<span class="opt-tag"></span><h3 class="opt-vol"></h3><p class="opt-note"></p>' +
+        '<div class="opt-row"><span>Tech</span><b class="o-tech"></b></div>' +
+        '<div class="opt-row"><span>Qualified attended appointment</span><b class="o-appt"></b></div>' +
+        '<hr class="opt-hr">' +
+        '<div class="opt-row sm"><span>Showed meetings / month</span><b class="o-meet"></b></div>' +
+        '<div class="opt-row sm"><span>Projected revenue</span><b class="o-rev"></b></div>' +
+        '<div class="opt-big"><span>Net profit</span><b class="o-net"></b></div>' +
+        '<div class="opt-big"><span>ROI</span><b class="o-roi"></b></div>';
+      return c;
+    }
+    document.querySelectorAll(".opt-pick").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const i = +btn.dataset.i;
+        if (optOn.has(i)) {
+          optOn.delete(i);
+          const c = optCards[i]; delete optCards[i];
+          c.classList.remove("in");
+          setTimeout(() => c.remove(), 300);
+          btn.setAttribute("aria-pressed", "false");
+        } else {
+          optOn.add(i);
+          const c = makeCard(i); optCards[i] = c; optBox.appendChild(c);
+          btn.setAttribute("aria-pressed", "true");
+          renderOptions();
+          requestAnimationFrame(() => requestAnimationFrame(() => c.classList.add("in")));
+        }
+        renderOptions();
+      });
+    });
+
     function calc() {
       const i = +vol.value;
       const perDay = STOPS[i];
@@ -239,6 +313,8 @@
       if ($("r-net")) { $("r-net").textContent = (netProfit < 0 ? "-$" : "$") + fmt(Math.abs(netProfit)); $("r-net").classList.toggle("neg", netProfit < 0); }
       $("r-roi").textContent = fmt(roi) + "%";
       $("r-roi").classList.toggle("neg", roi < 0);
+      curLtv = ltv; curClose = close;
+      renderOptions();
     }
 
     calc();

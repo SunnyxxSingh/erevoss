@@ -664,3 +664,36 @@ section[id]{scroll-margin-top:110px;}
   .ty-scroll-in{position:static;}
   .ty-scroll span{font-size:1.9rem;}
 }
+
+/* ===== option cards under the ROI calculator (roi.html) ===== */
+.roi-calc .opt-wrap{max-width:1008px;margin:22px auto 0;}
+.roi-calc .opt-picks{display:flex;justify-content:center;gap:6px;}
+.roi-calc .opt-pick{background:none;border:0;padding:4px 10px;font:600 12px/1 var(--r-display);letter-spacing:0.08em;color:rgba(255,255,255,0.16);cursor:default;}
+.roi-calc .opt-pick:hover{color:rgba(255,255,255,0.32);}
+.roi-calc .opt-pick:focus-visible{outline:1px solid var(--r-accent);outline-offset:2px;}
+.roi-calc .opt-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:10px;}
+.roi-calc .opt-card{flex:0 1 calc(50% - 8px);min-width:290px;box-sizing:border-box;background:var(--r-card);border:1px solid var(--r-line);border-radius:12px;padding:24px 26px;display:grid;gap:12px;align-content:start;opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease;}
+.roi-calc .opt-card.in{opacity:1;transform:none;}
+.roi-calc .opt-tag{font:700 12px/1 var(--r-display);letter-spacing:0.16em;text-transform:uppercase;color:var(--r-accent-soft,#ff6a3d);}
+.roi-calc .opt-vol{margin:0;font:700 clamp(24px,3.4vw,32px)/1.1 var(--r-display);color:var(--r-head);letter-spacing:-0.02em;}
+.roi-calc .opt-note{margin:0;color:var(--r-muted);font-size:14.5px;font-style:italic;}
+.roi-calc .opt-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:15.5px;color:var(--r-text);}
+.roi-calc .opt-row b{font:600 16px/1.2 var(--r-display);color:var(--r-head);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.roi-calc .opt-row.sm{font-size:14px;color:var(--r-muted);}
+.roi-calc .opt-row.sm b{font-size:14px;font-weight:500;color:var(--r-muted);}
+.roi-calc .opt-hr{border:0;border-top:1px solid var(--r-line);margin:4px 0 2px;}
+.roi-calc .opt-big{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--r-text);font-size:16px;}
+.roi-calc .opt-big b{font:700 clamp(28px,3.6vw,38px)/1.1 var(--r-display);color:var(--r-head);letter-spacing:-0.02em;font-variant-numeric:tabular-nums;}
+.roi-calc .opt-big b.g{color:var(--r-green);}
+.roi-calc .opt-big b.neg{color:var(--r-red);}
+@media (max-width:640px){ .roi-calc .opt-card{flex-basis:100%;min-width:0;} }
+@media (prefers-reduced-motion:reduce){ .roi-calc .opt-card{transition:none;transform:none;} }
+.roi-calc.roi-reco{margin-top:clamp(70px,10vw,120px);}
+.roi-calc.roi-reco .opt-wrap{margin-top:0;}
+.roi-calc.roi-reco .opt-picks{gap:10px;}
+
+/* heading above the cost cards on roi.html: bring the cards up close to it */
+.roi-page #cost-compare-heading .title{padding-bottom:24px;}
+.roi-page .cost-wrap .cost-compare{margin-top:0;}
+.roi-page .cost-wrap .cost-stack{padding-top:0;}
+.roi-page .cost-wrap #do-it-for-you{padding-top:0;}
